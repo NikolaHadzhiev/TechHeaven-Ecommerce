@@ -16,6 +16,7 @@ const midLinks = [
   { title: "catalog", path: "/catalog" },
   { title: "about", path: "/about" },
   { title: "contact", path: "/contact" },
+  {title: "test", path: "/error-test"}
 ];
 
 const rightLinks = [
@@ -28,7 +29,7 @@ const navStyles = {
   textDecoration: "none",
   typography: "h6 ",
   "&:hover": { color: "grey.500" },
-  "&.active": { color: "text.secondary" },
+  "&.active": { color: "#240747" },
 };
 interface Props {
   darkMode: boolean;
@@ -37,7 +38,7 @@ interface Props {
 
 const Header = ({ darkMode, handleThemeChange }: Props) => {
   return (
-    <AppBar position="static" sx={{ mb: 4 }}>
+    <AppBar position="static" sx={{ mb: 4, backgroundColor: "#3b50b2"}}>
       <Toolbar
         sx={{
           display: "flex",

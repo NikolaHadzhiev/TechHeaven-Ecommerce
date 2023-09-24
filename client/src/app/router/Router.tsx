@@ -6,6 +6,7 @@ import AboutPage from "../../features/about/AboutPage";
 import HomePage from "../../features/home/HomePage";
 import App from "../layout/App";
 import ContactPage from "../../features/contact/ContactPage";
+import TestPage from "../../features/component-test/TestPage";
 
 export const router = createBrowserRouter([
     {
@@ -16,7 +17,8 @@ export const router = createBrowserRouter([
             {path: "catalog", element: <Catalog />},
             {path: "catalog/:id", element: <ProductDetails />},
             {path: "about", element: <AboutPage />},
-            {path: "contact", element: <ContactPage />}
+            {path: "contact", element: <ContactPage />},
+            {path: "error-test", element: <TestPage />}
         ]
     }
 ])
