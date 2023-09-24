@@ -12,7 +12,7 @@ const ProductList = ({products}: Props) =>  {
         {products.map((product) => (
             <Grid item xs={3} key={product.id}>
                 <ProductCard product={product} />
-          </Grid>
+            </Grid>
         ))}
       </Grid>
     )
