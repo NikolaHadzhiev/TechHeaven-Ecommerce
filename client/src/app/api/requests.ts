@@ -1,5 +1,6 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { toast } from "react-toastify";
+import { router } from "../router/Router";
 
 axios.defaults.baseURL = "http://localhost:5095/api/";
 
@@ -21,7 +22,7 @@ axios.interceptors.response.use(
             //data.errors[key] -> returns Array
 
             //[[], [], [], ...]
-              validationErrors.push(data.errors[key]);
+            validationErrors.push(data.errors[key]);
           }
 
           //Concats all subarrays and returns one array
@@ -32,8 +33,13 @@ axios.interceptors.response.use(
       case 401:
         toast.error(data.title);
         break;
+      case 404:
+        toast.error(data.title);
+        router.navigate("/not-found");
+        break;
       case 500:
         toast.error(data.title);
+        router.navigate("/server-error");
         break;
       default:
         break;
