@@ -18,7 +18,7 @@ const ProductDetails = () => {
             .finally(() => setLoading(false))
     }, [id]);
     
-    if (loading) return <LoadingComponent message="Loading product... Please wait"/>
+    if (loading) return <LoadingComponent message="Loading product... Please wait 🥱"/>
 
     if (!product) return <NotFound />
 

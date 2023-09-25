@@ -16,7 +16,7 @@ const Catalog = () => {
     
   }, [])
 
-  if (loading) return <LoadingComponent message="Loading products..." />
+  if (loading) return <LoadingComponent message="Loading products... 🥱" />
   
   return (
     <>

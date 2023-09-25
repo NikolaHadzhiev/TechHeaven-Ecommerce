@@ -4,10 +4,14 @@ import { router } from "../router/Router";
 
 axios.defaults.baseURL = "http://localhost:5095/api/";
 
+//Simulates slow responses (ONLY FOR DEVELOPMENT PURPOSES)
+const simulateSlowResponse = () => new Promise(resolve => setTimeout(resolve, 500))
+
 const responseBody = (response: AxiosResponse) => response.data;
 
 axios.interceptors.response.use(
   async (response) => {
+    await simulateSlowResponse() //Will remove in production
     return response;
   },
   (error: AxiosError) => {
