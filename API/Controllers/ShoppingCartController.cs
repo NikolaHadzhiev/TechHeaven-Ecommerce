@@ -1,4 +1,5 @@
 using API.Data;
+using API.DTOs;
 using API.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -14,14 +15,28 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<ShoppingCart>> GetShoppingCart()
+        public async Task<ActionResult<ShoppingCartDTO>> GetShoppingCart()
         {
             //BUYER_ID is stored in a cookie when a user creates shopping cart(adds an item to the cart for the first time)
             var shoppingCart = await GetShoppingCartFn();
 
             if (shoppingCart == null) return NotFound();
 
-            return shoppingCart;
+            return new ShoppingCartDTO
+            {
+                 Id = shoppingCart.Id,
+                 BuyerId = shoppingCart.BuyerId,
+                 Items = shoppingCart.Items.Select(item => new ShoppingCartItemDTO
+                 {
+                    ProductId = item.ProductId,
+                    Name = item.Product.Name,
+                    Price = item.Product.Price,
+                    PictureUrl = item.Product.PictureUrl,
+                    Type = item.Product.Type,
+                    Brand = item.Product.Brand,
+                    Quantity = item.ItemQuantity
+                 }).ToList()
+            };
         }
 
 
