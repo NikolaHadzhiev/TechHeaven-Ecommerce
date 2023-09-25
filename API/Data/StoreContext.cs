@@ -10,5 +10,6 @@ namespace API.Data
         }
 
         public DbSet<Product> Products {get; set;}
+        public DbSet<ShoppingCart> ShoppingCarts {get; set;}
     }
 }
