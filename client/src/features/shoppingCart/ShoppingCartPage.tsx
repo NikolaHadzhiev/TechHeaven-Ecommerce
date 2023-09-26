@@ -1,22 +1,10 @@
-import { useEffect, useState } from "react";
-import { ShoppingCart } from "../../app/interfaces/shoppingCart";
-import apiRequests from "../../app/api/requests";
-import LoadingComponent from "../../app/layout/LoadingComponent";
 import { IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
 import { Delete } from "@mui/icons-material";
+import { useStoreContext } from "../../hooks/useStoreContext";
 
 const ShoppingCartPage = () => {
-  const [loading, setLoading] = useState(true);
-  const [shoppingCart, setShoppingCart] = useState<ShoppingCart | null>(null);
+  const {shoppingCart} = useStoreContext();
 
-  useEffect(() => {
-    apiRequests.ShoppingCart.get()
-      .then((shoppingCart) => setShoppingCart(shoppingCart))
-      .catch((error) => console.log(error))
-      .finally(() => setLoading(false));
-  }, []);
-
-  if(loading) return <LoadingComponent message="Loading shopping cart... 🥱" />
   if(!shoppingCart) return <Typography variant="h3">Your shopping cart is empty</Typography>
 
   return (

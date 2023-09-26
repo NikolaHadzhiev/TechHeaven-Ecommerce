@@ -13,6 +13,7 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import apiRequests from "../../app/api/requests";
 import { LoadingButton } from "@mui/lab";
+import { useStoreContext } from "../../hooks/useStoreContext";
 
 interface Props {
   product: Product;
@@ -20,10 +21,12 @@ interface Props {
 
 const ProductCard = ({ product }: Props) => {
   const [loading, setLoading] = useState(false);
+  const { setShoppingCart } = useStoreContext();
 
   function handleAddItem(productId: number, quantity = 1) {
     setLoading(true);
-    apiRequests.ShoppingCart.addItem(productId, quantity)
+    apiRequests.ShoppingCart.addItem(productId, quantity) //after adding the item the shopping cart is returned from API
+      .then(shoppingCart => setShoppingCart(shoppingCart))
       .catch((error) => console.log(error))
       .finally(() => setLoading(false));
   }
