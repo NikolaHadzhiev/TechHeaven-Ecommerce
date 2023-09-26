@@ -9,6 +9,7 @@ import ContactPage from "../../features/contact/ContactPage";
 import TestPage from "../../features/component-test/TestPage";
 import ServerError from "../../errors/ServerError";
 import NotFound from "../../errors/NotFound";
+import ShoppingCartPage from "../../features/shoppingCart/ShoppingCartPage";
 
 export const router = createBrowserRouter([
     {
@@ -18,6 +19,7 @@ export const router = createBrowserRouter([
             {path: "", element: <HomePage />},
             {path: "catalog", element: <Catalog />},
             {path: "catalog/:id", element: <ProductDetails />},
+            {path: "shopping-cart", element: <ShoppingCartPage />},
             {path: "about", element: <AboutPage />},
             {path: "contact", element: <ContactPage />},
             {path: "error-test", element: <TestPage />},

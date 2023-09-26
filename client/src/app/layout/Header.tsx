@@ -67,7 +67,7 @@ const Header = ({ darkMode, handleThemeChange }: Props) => {
         </List>
 
         <Box display='flex' alignItems='center'>
-          <IconButton size="large" edge="start" color="inherit" sx={{ mr: 2 }}>
+          <IconButton component={NavLink} to={'/shopping-cart'} size="large" edge="start" color="inherit" sx={{ mr: 2 }}>
             <Badge badgeContent="4" color="secondary">
               <ShoppingCart />
             </Badge>

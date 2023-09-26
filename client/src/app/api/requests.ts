@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import { router } from "../router/Router";
 
 axios.defaults.baseURL = "http://localhost:5095/api/";
-
+axios.defaults.withCredentials = true; //Cookie would not be saved to client without this!!
 //Simulates slow responses (ONLY FOR DEVELOPMENT PURPOSES)
 const simulateSlowResponse = () => new Promise(resolve => setTimeout(resolve, 500))
 
@@ -54,8 +54,8 @@ axios.interceptors.response.use(
 
 const requests = {
   get: (url: string) => axios.get(url).then(responseBody),
-  post: (url: string, body: {}) => axios.post(url, body).then(responseBody),
-  put: (url: string, body: {}) => axios.put(url, body).then(responseBody),
+  post: (url: string, body: {} = {}) => axios.post(url, body).then(responseBody),
+  put: (url: string, body: {} = {}) => axios.put(url, body).then(responseBody),
   del: (url: string) => axios.delete(url).then(responseBody),
 };
 
@@ -63,6 +63,12 @@ const Catalog = {
   list: () => requests.get("products"),
   details: (id: number) => requests.get(`products/${id}`),
 };
+
+const ShoppingCart = {
+  get: () => requests.get('shoppingCart'),
+  addItem: (productId: number, quantity = 1) => requests.post(`shoppingCart?productId=${productId}&quantity=${quantity}`),
+  removeItem: (productId: number, quantity = 1) => requests.del(`shoppingCart?productId=${productId}&quantity=${quantity}`)
+}
 
 //Testing purposes - may be deleted after development
 const TestErrors = {
@@ -76,6 +82,7 @@ const TestErrors = {
 const apiRequests = {
   Catalog,
   TestErrors,
+  ShoppingCart
 };
 
 export default apiRequests;

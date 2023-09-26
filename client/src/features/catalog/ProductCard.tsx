@@ -10,24 +10,40 @@ import {
 } from "@mui/material";
 import { Product } from "../../app/interfaces/product";
 import { Link } from "react-router-dom";
+import { useState } from "react";
+import apiRequests from "../../app/api/requests";
+import { LoadingButton } from "@mui/lab";
 
 interface Props {
   product: Product;
 }
 
 const ProductCard = ({ product }: Props) => {
+  const [loading, setLoading] = useState(false);
+
+  function handleAddItem(productId: number, quantity = 1) {
+    setLoading(true);
+    apiRequests.ShoppingCart.addItem(productId, quantity)
+      .catch((error) => console.log(error))
+      .finally(() => setLoading(false));
+  }
+
   return (
     <Card>
-      <CardHeader 
-      avatar={<Avatar sx={{bgcolor: "secondary.main"}}>{product.name.charAt(0).toUpperCase()}</Avatar>} 
-      title={product.name}
-      titleTypographyProps={{
-        sx: {fontWeight: "bold", color: "primary.main"}
+      <CardHeader
+        avatar={
+          <Avatar sx={{ bgcolor: "secondary.main" }}>
+            {product.name.charAt(0).toUpperCase()}
+          </Avatar>
+        }
+        title={product.name}
+        titleTypographyProps={{
+          sx: { fontWeight: "bold", color: "primary.main" },
         }}
       />
-      
+
       <CardMedia
-        sx={{ height: 140, backgroundSize: "contain"}}
+        sx={{ height: 140, backgroundSize: "contain" }}
         image={product.pictureUrl}
         title={product.name}
       />
@@ -40,8 +56,16 @@ const ProductCard = ({ product }: Props) => {
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small">Add to cart</Button>
-        <Button component={Link} to={`/catalog/${product.id}`} size="small">View details</Button>
+        <LoadingButton
+          loading={loading}
+          size="small"
+          onClick={() => handleAddItem(product.id)}
+        >
+          Add to cart
+        </LoadingButton>
+        <Button component={Link} to={`/catalog/${product.id}`} size="small">
+          View details
+        </Button>
       </CardActions>
     </Card>
   );
