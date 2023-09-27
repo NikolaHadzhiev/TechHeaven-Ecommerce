@@ -1,7 +1,7 @@
 import apiRequests from "../../app/api/requests";
 import { Product } from "../../app/interfaces/product";
 import LoadingComponent from "../../app/layout/LoadingComponent";
-import ProductList from "./ProductList";
+import ProductList from "../product/ProductList";
 import { useEffect, useState } from "react";
 
 const Catalog = () => {

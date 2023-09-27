@@ -1,6 +1,6 @@
 import { Navigate, createBrowserRouter } from "react-router-dom";
-import Catalog from "../../features/catalog/Catalog";
-import ProductDetails from "../../features/catalog/ProductDetails";
+import Catalog from "../../features/catalog/CatalogPage";
+import ProductDetails from "../../features/product/ProductDetails";
 import AboutPage from "../../features/about/AboutPage";
 
 import HomePage from "../../features/home/HomePage";
