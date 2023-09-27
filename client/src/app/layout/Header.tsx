@@ -39,7 +39,7 @@ interface Props {
 
 const Header = ({ darkMode, handleThemeChange }: Props) => {
   const { shoppingCart } = useStoreContext();
-  const itemsInCartCount = shoppingCart?.items.reduce((value, item) => value + item.quantity, 0)
+  const itemsInCartCount = shoppingCart?.items.reduce((value, item) => value + item.quantity, 0);
 
   return (
     <AppBar position="static" sx={{ mb: 4, backgroundColor: "#3b50b2"}}>
@@ -72,7 +72,7 @@ const Header = ({ darkMode, handleThemeChange }: Props) => {
 
         <Box display='flex' alignItems='center'>
           <IconButton component={NavLink} to={'/shopping-cart'} size="large" edge="start" color="inherit" sx={{ mr: 2 }}>
-            <Badge badgeContent={itemsInCartCount} color="secondary">
+            <Badge badgeContent={itemsInCartCount?.toString()} color="secondary">
               <ShoppingCart />
             </Badge>
           </IconButton>

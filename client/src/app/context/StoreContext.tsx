@@ -2,53 +2,50 @@ import { PropsWithChildren, createContext, useState } from "react";
 import { ShoppingCart } from "../interfaces/shoppingCart";
 
 interface Context {
-    shoppingCart: ShoppingCart | null;
-    setShoppingCart: (shoppingCart: ShoppingCart) => void;
-    updateItemQuantity: (productId: number, quantity: number) => void;
-    removeItemFromShoppingCart: (productId: number, quantity: number) => void;
+  shoppingCart: ShoppingCart | null;
+  setShoppingCart: React.Dispatch<React.SetStateAction<ShoppingCart | null>>;
+  updateItemQuantity: (productId: number, quantity: number) => void;
+  removeItemFromShoppingCart: (productId: number, quantity: number) => void;
 }
 
 export const StoreContext = createContext<Context | undefined>(undefined);
 
-export const StoreProvider = ({children}: PropsWithChildren<any>) => {
-    const [shoppingCart, setShoppingCart] = useState<ShoppingCart | null>(null);
+export const StoreProvider = ({ children }: PropsWithChildren<any>) => {
+  const [shoppingCart, setShoppingCart] = useState<ShoppingCart | null>(null);
 
-    function updateItemQuantity(productId: number, quantity: number){
-        if(!shoppingCart) return;
-        
-        const items = [...shoppingCart.items]; //create a copy of state instead of mutate current state
-        const itemIndex = items.findIndex(i => i.productId === productId);
+  function updateItemQuantity(productId: number, quantity: number) {
+    handleAddRemove(productId, quantity, 'add')
+  }
 
-        if(itemIndex >= 0){
-            items[itemIndex].quantity += quantity;
-            setShoppingCart(preState => {
-                return {...preState!, items} //! because we are sure the state is not going to be undefined
-            })
-        }
-    }
+  function removeItemFromShoppingCart(productId: number, quantity: number) {
+    handleAddRemove(productId, quantity, 'remove')
+  }
 
-    function removeItemFromShoppingCart(productId: number, quantity: number){
-        if(!shoppingCart) return;
-        
-        const items = [...shoppingCart.items]; //create a copy of state instead of mutate current state
-        const itemIndex = items.findIndex(i => i.productId === productId);
+  function handleAddRemove(productId: number, quantity: number, indicator: string) {
+    if (!shoppingCart) return;
 
-        if(itemIndex >= 0){
-            items[itemIndex].quantity -= quantity;
-            if(items[itemIndex].quantity <= 0) items.splice(itemIndex, 1);
-            setShoppingCart(preState => {
-                return {...preState!, items} //! because we are sure the state is not going to be undefined
-            })
-        }
-    }
+    const items = [...shoppingCart.items]; //create a copy of state instead of mutate current state
+    const itemIndex = items.findIndex((i) => i.productId === productId);
 
-    return (
-        <StoreContext.Provider value={{shoppingCart, setShoppingCart, updateItemQuantity, removeItemFromShoppingCart}}>
-            {children}
-        </StoreContext.Provider>
-    )
-}
+    if (itemIndex >= 0) {
+        indicator === 'add' ? items[itemIndex].quantity += quantity : items[itemIndex].quantity -= quantity;
+        if (items[itemIndex].quantity <= 0) items.splice(itemIndex, 1);
+        setShoppingCart((preState) => {
+          return { ...preState!, items }; //! because we are sure the state is not going to be undefined
+        });
+      }
+  }
 
-
-
-
+  return (
+    <StoreContext.Provider
+      value={{
+        shoppingCart,
+        setShoppingCart,
+        updateItemQuantity,
+        removeItemFromShoppingCart,
+      }}
+    >
+      {children}
+    </StoreContext.Provider>
+  );
+};
