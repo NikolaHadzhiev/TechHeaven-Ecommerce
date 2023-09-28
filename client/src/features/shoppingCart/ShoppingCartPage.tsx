@@ -15,23 +15,27 @@ import { LoadingButton } from "@mui/lab";
 import apiRequests from "../../app/api/requests";
 
 const ShoppingCartPage = () => {
-  const { shoppingCart, updateItemQuantity, removeItemFromShoppingCart } = useStoreContext();
-  const [loading, setLoading] = useState(false);
+  const { shoppingCart, updateItemQuantity, removeItemFromShoppingCart } =
+    useStoreContext();
+  const [buttonLoadingState, setButtonLoadingState] = useState({
+    loading: false,
+    buttonName: "",
+  });
 
-  function handlePlusItem(productId: number, quantity = 1){
-    setLoading(true);
+  function handlePlusItem(productId: number, buttonName: string, quantity = 1) {
+    setButtonLoadingState({ loading: true, buttonName });
     apiRequests.ShoppingCart.addItem(productId)
-        .then(() => updateItemQuantity(productId, quantity))
-        .catch(error => console.log(error))
-        .finally(() => setLoading(false))
+      .then(() => updateItemQuantity(productId, quantity))
+      .catch((error) => console.log(error))
+      .finally(() => setButtonLoadingState({ loading: true, buttonName: "" }));
   }
 
-  function handleMinusItem(productId: number, quantity = 1){
-    setLoading(true);
+  function handleMinusItem(productId: number, buttonName: string, quantity = 1) {
+    setButtonLoadingState({ loading: true, buttonName });
     apiRequests.ShoppingCart.removeItem(productId, quantity)
-        .then(() => removeItemFromShoppingCart(productId, quantity))
-        .catch(error => console.log(error))
-        .finally(() => setLoading(false))
+      .then(() => removeItemFromShoppingCart(productId, quantity))
+      .catch((error) => console.log(error))
+      .finally(() => setButtonLoadingState({ loading: true, buttonName: "" }));
   }
 
   if (!shoppingCart || shoppingCart.items.length === 0)
@@ -62,11 +66,29 @@ const ShoppingCartPage = () => {
                 ${(item.price / 100).toFixed(2)}
               </TableCell>
               <TableCell align="center">
-                <LoadingButton color="error" onClick={() => {handleMinusItem(item.productId)}} loading={loading}>
+                <LoadingButton
+                  color="error"
+                  onClick={() => {
+                    handleMinusItem(item.productId, `remove ${item.productId}`);
+                  }}
+                  loading={
+                    buttonLoadingState.loading &&
+                    buttonLoadingState.buttonName === `remove ${item.productId}`
+                  }
+                >
                   <Remove />
                 </LoadingButton>
                 {item.quantity}
-                <LoadingButton color="primary" onClick={() => {handlePlusItem(item.productId)}} loading={loading}>
+                <LoadingButton
+                  color="primary"
+                  onClick={() => {
+                    handlePlusItem(item.productId, `add ${item.productId}`);
+                  }}
+                  loading={
+                    buttonLoadingState.loading &&
+                    buttonLoadingState.buttonName === `add ${item.productId}`
+                  }
+                >
                   <Add />
                 </LoadingButton>
               </TableCell>
@@ -74,7 +96,16 @@ const ShoppingCartPage = () => {
                 ${((item.price / 100) * item.quantity).toFixed(2)}
               </TableCell>
               <TableCell align="right">
-                <LoadingButton color="error" onClick={() => {handleMinusItem(item.productId, item.quantity)}} loading={loading}>
+                <LoadingButton
+                  color="error"
+                  onClick={() => {
+                    handleMinusItem(item.productId, `delete ${item.productId}` ,item.quantity);
+                  }}
+                  loading={
+                    buttonLoadingState.loading &&
+                    buttonLoadingState.buttonName === `delete ${item.productId}`
+                  }
+                >
                   <Delete />
                 </LoadingButton>
               </TableCell>
