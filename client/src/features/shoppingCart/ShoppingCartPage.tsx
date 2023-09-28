@@ -27,7 +27,7 @@ const ShoppingCartPage = () => {
     apiRequests.ShoppingCart.addItem(productId)
       .then(() => updateItemQuantity(productId, quantity))
       .catch((error) => console.log(error))
-      .finally(() => setButtonLoadingState({ loading: true, buttonName: "" }));
+      .finally(() => setButtonLoadingState({ loading: false, buttonName: "" }));
   }
 
   function handleMinusItem(productId: number, buttonName: string, quantity = 1) {
@@ -35,7 +35,7 @@ const ShoppingCartPage = () => {
     apiRequests.ShoppingCart.removeItem(productId, quantity)
       .then(() => removeItemFromShoppingCart(productId, quantity))
       .catch((error) => console.log(error))
-      .finally(() => setButtonLoadingState({ loading: true, buttonName: "" }));
+      .finally(() => setButtonLoadingState({ loading: false, buttonName: "" }));
   }
 
   if (!shoppingCart || shoppingCart.items.length === 0)
