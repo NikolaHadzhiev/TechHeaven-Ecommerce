@@ -11,16 +11,20 @@ import {
   Typography,
 } from "@mui/material";
 import { Add, Delete, Remove } from "@mui/icons-material";
-import { useStoreContext } from "../../hooks/useStoreContext";
+// import { useStoreContext } from "../../app/hooks/useStoreContext";
 import { useState } from "react";
 import { LoadingButton } from "@mui/lab";
 import apiRequests from "../../app/api/requests";
 import OrderSummary from "./OrderSummary";
 import { Link } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../../app/hooks/reduxHooks";
+import { updateOrRemoveItemFromShoppingCart } from "../../app/store/slices/shoppingCartSlice";
 
 const ShoppingCartPage = () => {
-  const { shoppingCart, updateItemQuantity, removeItemFromShoppingCart } =
-    useStoreContext();
+  // const { shoppingCart, updateItemQuantity, removeItemFromShoppingCart } = useStoreContext();
+  const { shoppingCart } = useAppSelector(state => state.shoppingCart);
+  const dispatch = useAppDispatch();
+
   const [buttonLoadingState, setButtonLoadingState] = useState({
     loading: false,
     buttonName: "",
@@ -29,7 +33,8 @@ const ShoppingCartPage = () => {
   function handlePlusItem(productId: number, buttonName: string, quantity = 1) {
     setButtonLoadingState({ loading: true, buttonName });
     apiRequests.ShoppingCart.addItem(productId)
-      .then(() => updateItemQuantity(productId, quantity))
+      // .then(() => updateItemQuantity(productId, quantity))
+      .then(() => dispatch(updateOrRemoveItemFromShoppingCart({productId, quantity, indicator: 'add'})))
       .catch((error) => console.log(error))
       .finally(() => setButtonLoadingState({ loading: false, buttonName: "" }));
   }
@@ -41,7 +46,8 @@ const ShoppingCartPage = () => {
   ) {
     setButtonLoadingState({ loading: true, buttonName });
     apiRequests.ShoppingCart.removeItem(productId, quantity)
-      .then(() => removeItemFromShoppingCart(productId, quantity))
+      // .then(() => removeItemFromShoppingCart(productId, quantity))
+      .then(() => dispatch(updateOrRemoveItemFromShoppingCart({productId, quantity, indicator: 'remove'})))
       .catch((error) => console.log(error))
       .finally(() => setButtonLoadingState({ loading: false, buttonName: "" }));
   }

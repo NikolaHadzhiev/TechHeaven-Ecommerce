@@ -15,12 +15,16 @@ import { Product } from "../../app/interfaces/product";
 import apiRequests from "../../app/api/requests";
 import NotFound from "../../errors/NotFound";
 import LoadingComponent from "../../app/layout/LoadingComponent";
-import { useStoreContext } from "../../hooks/useStoreContext";
+// import { useStoreContext } from "../../app/hooks/useStoreContext";
 import { LoadingButton } from "@mui/lab";
+import { useAppDispatch, useAppSelector } from "../../app/hooks/reduxHooks";
+import { setShoppingCart, updateOrRemoveItemFromShoppingCart } from "../../app/store/slices/shoppingCartSlice";
 
 const ProductDetails = () => {
-  const { shoppingCart, setShoppingCart, removeItemFromShoppingCart } =
-    useStoreContext();
+  // const { shoppingCart, setShoppingCart, removeItemFromShoppingCart } = useStoreContext();
+  const {shoppingCart} = useAppSelector(state => state.shoppingCart);
+  const dispatch = useAppDispatch();
+  
   const { id } = useParams<{ id: string }>();
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
@@ -56,7 +60,8 @@ const ProductDetails = () => {
         : quantity;
 
       apiRequests.ShoppingCart.addItem(product?.id!, addQuantity)
-        .then(shoppingCart => setShoppingCart(shoppingCart))
+        // .then(shoppingCart => setShoppingCart(shoppingCart))
+        .then(shoppingCart => dispatch(setShoppingCart(shoppingCart)))
         .catch((error) => console.log(error))
         .finally(() => setSubmitting(false));
 
@@ -64,7 +69,8 @@ const ProductDetails = () => {
       const removeQuantity = shoppingCartItem.quantity - quantity;
       
       apiRequests.ShoppingCart.removeItem(product?.id!, removeQuantity)
-        .then(() => removeItemFromShoppingCart(product?.id!, removeQuantity))
+        // .then(() => removeItemFromShoppingCart(product?.id!, removeQuantity))
+        .then(() => dispatch(updateOrRemoveItemFromShoppingCart({productId: product?.id!, quantity: removeQuantity, indicator: 'remove'})))
         .catch((error) => console.log(error))
         .finally(() => setSubmitting(false));
     }

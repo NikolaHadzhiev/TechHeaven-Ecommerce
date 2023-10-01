@@ -1,8 +1,10 @@
 import { TableContainer, Paper, Table, TableBody, TableRow, TableCell } from "@mui/material";
-import { useStoreContext } from "../../hooks/useStoreContext";
+// import { useStoreContext } from "../../app/hooks/useStoreContext";
+import { useAppSelector } from "../../app/hooks/reduxHooks";
 
 const OrderSummary = () =>  {
-    const {shoppingCart} = useStoreContext();
+    // const {shoppingCart} = useStoreContext();
+    const {shoppingCart} = useAppSelector(state => state.shoppingCart);
     const subtotal = shoppingCart?.items.reduce((value, item) => value + (item.quantity * item.price), 0) ?? 0;
     const deliveryFee = subtotal > 5000 ? 0 : 500;
 

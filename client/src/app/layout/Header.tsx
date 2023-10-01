@@ -11,7 +11,8 @@ import {
   Typography,
 } from "@mui/material";
 import { NavLink } from "react-router-dom";
-import { useStoreContext } from "../../hooks/useStoreContext";
+// import { useStoreContext } from "../../app/hooks/useStoreContext";
+import { useAppSelector } from "../hooks/reduxHooks";
 
 const midLinks = [
   { title: "catalog", path: "/catalog" },
@@ -38,7 +39,8 @@ interface Props {
 }
 
 const Header = ({ darkMode, handleThemeChange }: Props) => {
-  const { shoppingCart } = useStoreContext();
+  // const { shoppingCart } = useStoreContext();
+  const {shoppingCart} = useAppSelector(state => state.shoppingCart);
   const itemsInCartCount = shoppingCart?.items.reduce((value, item) => value + item.quantity, 0);
 
   return (
