@@ -18,18 +18,18 @@ import LoadingComponent from "../../app/layout/LoadingComponent";
 // import { useStoreContext } from "../../app/hooks/useStoreContext";
 import { LoadingButton } from "@mui/lab";
 import { useAppDispatch, useAppSelector } from "../../app/hooks/reduxHooks";
-import { setShoppingCart, updateOrRemoveItemFromShoppingCart } from "../../app/store/slices/shoppingCartSlice";
+import { addItemAsync, removeItemAsync} from "../../app/store/slices/shoppingCartSlice";
 
 const ProductDetails = () => {
   // const { shoppingCart, setShoppingCart, removeItemFromShoppingCart } = useStoreContext();
-  const {shoppingCart} = useAppSelector(state => state.shoppingCart);
+  const {shoppingCart, loadingState} = useAppSelector(state => state.shoppingCart);
   const dispatch = useAppDispatch();
   
   const { id } = useParams<{ id: string }>();
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(0);
-  const [submitting, setSubmitting] = useState(false);
+  // const [submitting, setSubmitting] = useState(false);
 
   const shoppingCartItem = shoppingCart?.items.find(
     (i) => i.productId === product?.id
@@ -52,27 +52,27 @@ const ProductDetails = () => {
   }
 
   function handleUpdateCart() {
-    setSubmitting(true);
-
     if (!shoppingCartItem || quantity > shoppingCartItem.quantity) {
-      const addQuantity = shoppingCartItem
-        ? quantity - shoppingCartItem.quantity
-        : quantity;
+      const addQuantity = shoppingCartItem ? quantity - shoppingCartItem.quantity : quantity;
 
-      apiRequests.ShoppingCart.addItem(product?.id!, addQuantity)
-        // .then(shoppingCart => setShoppingCart(shoppingCart))
-        .then(shoppingCart => dispatch(setShoppingCart(shoppingCart)))
-        .catch((error) => console.log(error))
-        .finally(() => setSubmitting(false));
+      // apiRequests.ShoppingCart.addItem(product?.id!, addQuantity)
+      //   // .then(shoppingCart => setShoppingCart(shoppingCart))
+      //   .then(shoppingCart => dispatch(setShoppingCart(shoppingCart)))
+      //   .catch((error) => console.log(error))
+      //   .finally(() => setSubmitting(false));
+
+      dispatch(addItemAsync({productId: product?.id!, quantity: addQuantity}))
 
     } else {
       const removeQuantity = shoppingCartItem.quantity - quantity;
-      
-      apiRequests.ShoppingCart.removeItem(product?.id!, removeQuantity)
-        // .then(() => removeItemFromShoppingCart(product?.id!, removeQuantity))
-        .then(() => dispatch(updateOrRemoveItemFromShoppingCart({productId: product?.id!, quantity: removeQuantity, indicator: 'remove'})))
-        .catch((error) => console.log(error))
-        .finally(() => setSubmitting(false));
+      dispatch(removeItemAsync({productId: product?.id!, quantity: removeQuantity}))
+      // apiRequests.ShoppingCart.removeItem(product?.id!, removeQuantity)
+      //   // .then(() => removeItemFromShoppingCart(product?.id!, removeQuantity))
+      //   .then(() => dispatch(updateOrRemoveItemFromShoppingCart({productId: product?.id!, quantity: removeQuantity, indicator: 'remove'})))
+      //   .catch((error) => console.log(error))
+      //   .finally(() => setSubmitting(false));
+
+
     }
   }
 
@@ -136,7 +136,7 @@ const ProductDetails = () => {
           <Grid item xs={6}>
             <LoadingButton
               disabled={(shoppingCartItem?.quantity === quantity) || (!shoppingCartItem && quantity === 0)}
-              loading={submitting}
+              loading={loadingState.includes('pending')}
               onClick={handleUpdateCart}
               sx={{ height: "55px" }}
               color="primary"

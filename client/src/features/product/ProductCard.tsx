@@ -10,30 +10,28 @@ import {
 } from "@mui/material";
 import { Product } from "../../app/interfaces/product";
 import { Link } from "react-router-dom";
-import { useState } from "react";
-import apiRequests from "../../app/api/requests";
 import { LoadingButton } from "@mui/lab";
-// import { useStoreContext } from "../../app/hooks/useStoreContext";
-import { useAppDispatch } from "../../app/hooks/reduxHooks";
-import { setShoppingCart } from "../../app/store/slices/shoppingCartSlice";
+import { useAppDispatch, useAppSelector } from "../../app/hooks/reduxHooks";
+import { addItemAsync } from "../../app/store/slices/shoppingCartSlice";
 
 interface Props {
   product: Product;
 }
 
 const ProductCard = ({ product }: Props) => {
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
   // const { setShoppingCart } = useStoreContext();
+  const {loadingState} = useAppSelector(state => state.shoppingCart)
   const dispatch = useAppDispatch();
 
-  function handleAddItem(productId: number, quantity = 1) {
-    setLoading(true);
-    apiRequests.ShoppingCart.addItem(productId, quantity) //after adding the item the shopping cart is returned from API
-      // .then(shoppingCart => setShoppingCart(shoppingCart))
-      .then(shoppingCart => dispatch(setShoppingCart(shoppingCart)))
-      .catch((error) => console.log(error))
-      .finally(() => setLoading(false));
-  }
+  // function handleAddItem(productId: number, quantity = 1) {
+  //   setLoading(true);
+  //   apiRequests.ShoppingCart.addItem(productId, quantity) //after adding the item the shopping cart is returned from API
+  //     // .then(shoppingCart => setShoppingCart(shoppingCart))
+  //     .then(shoppingCart => dispatch(setShoppingCart(shoppingCart)))
+  //     .catch((error) => console.log(error))
+  //     .finally(() => setLoading(false));
+  // }
 
   return (
     <Card>
@@ -64,9 +62,9 @@ const ProductCard = ({ product }: Props) => {
       </CardContent>
       <CardActions>
         <LoadingButton
-          loading={loading}
+          loading={loadingState.includes(`pendingAddItem ${product.id}`)}
           size="small"
-          onClick={() => handleAddItem(product.id)}
+          onClick={() => dispatch(addItemAsync({productId: product.id}))}
         >
           Add to cart
         </LoadingButton>

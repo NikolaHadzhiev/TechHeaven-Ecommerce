@@ -12,45 +12,45 @@ import {
 } from "@mui/material";
 import { Add, Delete, Remove } from "@mui/icons-material";
 // import { useStoreContext } from "../../app/hooks/useStoreContext";
-import { useState } from "react";
+// import apiRequests from "../../app/api/requests";
 import { LoadingButton } from "@mui/lab";
-import apiRequests from "../../app/api/requests";
 import OrderSummary from "./OrderSummary";
 import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../app/hooks/reduxHooks";
-import { updateOrRemoveItemFromShoppingCart } from "../../app/store/slices/shoppingCartSlice";
+import { addItemAsync, removeItemAsync } from "../../app/store/slices/shoppingCartSlice";
+// import { updateOrRemoveItemFromShoppingCart } from "../../app/store/slices/shoppingCartSlice";
 
 const ShoppingCartPage = () => {
   // const { shoppingCart, updateItemQuantity, removeItemFromShoppingCart } = useStoreContext();
-  const { shoppingCart } = useAppSelector(state => state.shoppingCart);
+  const { shoppingCart, loadingState} = useAppSelector(state => state.shoppingCart);
   const dispatch = useAppDispatch();
+ 
+  // const [buttonLoadingState, setButtonLoadingState] = useState({
+  //   loading: false,
+  //   buttonName: "",
+  // });
 
-  const [buttonLoadingState, setButtonLoadingState] = useState({
-    loading: false,
-    buttonName: "",
-  });
+  // function handlePlusItem(productId: number, buttonName: string, quantity = 1) {
+  //   setButtonLoadingState({ loading: true, buttonName });
+  //   apiRequests.ShoppingCart.addItem(productId)
+  //     // .then(() => updateItemQuantity(productId, quantity))
+  //     .then(() => dispatch(updateOrRemoveItemFromShoppingCart({productId, quantity, indicator: 'add'})))
+  //     .catch((error) => console.log(error))
+  //     .finally(() => setButtonLoadingState({ loading: false, buttonName: "" }));
+  // }
 
-  function handlePlusItem(productId: number, buttonName: string, quantity = 1) {
-    setButtonLoadingState({ loading: true, buttonName });
-    apiRequests.ShoppingCart.addItem(productId)
-      // .then(() => updateItemQuantity(productId, quantity))
-      .then(() => dispatch(updateOrRemoveItemFromShoppingCart({productId, quantity, indicator: 'add'})))
-      .catch((error) => console.log(error))
-      .finally(() => setButtonLoadingState({ loading: false, buttonName: "" }));
-  }
-
-  function handleMinusItem(
-    productId: number,
-    buttonName: string,
-    quantity = 1
-  ) {
-    setButtonLoadingState({ loading: true, buttonName });
-    apiRequests.ShoppingCart.removeItem(productId, quantity)
-      // .then(() => removeItemFromShoppingCart(productId, quantity))
-      .then(() => dispatch(updateOrRemoveItemFromShoppingCart({productId, quantity, indicator: 'remove'})))
-      .catch((error) => console.log(error))
-      .finally(() => setButtonLoadingState({ loading: false, buttonName: "" }));
-  }
+  // function handleMinusItem(
+  //   productId: number,
+  //   buttonName: string,
+  //   quantity = 1
+  // ) {
+  //   setButtonLoadingState({ loading: true, buttonName });
+  //   apiRequests.ShoppingCart.removeItem(productId, quantity)
+  //     // .then(() => removeItemFromShoppingCart(productId, quantity))
+  //     .then(() => dispatch(updateOrRemoveItemFromShoppingCart({productId, quantity, indicator: 'remove'})))
+  //     .catch((error) => console.log(error))
+  //     .finally(() => setButtonLoadingState({ loading: false, buttonName: "" }));
+  // }
 
   if (!shoppingCart || shoppingCart.items.length === 0)
     return <Typography variant="h3">Your shopping cart is empty</Typography>;
@@ -83,30 +83,16 @@ const ShoppingCartPage = () => {
                 <TableCell align="center">
                   <LoadingButton
                     color="error"
-                    onClick={() => {
-                      handleMinusItem(
-                        item.productId,
-                        `remove ${item.productId}`
-                      );
-                    }}
-                    loading={
-                      buttonLoadingState.loading &&
-                      buttonLoadingState.buttonName ===
-                        `remove ${item.productId}`
-                    }
+                    onClick={() => {dispatch(removeItemAsync({productId: item.productId, quantity: 1, name: 'remove'}))}}
+                    loading={loadingState === `pendingRemoveItem ${item.productId} remove`}
                   >
                     <Remove />
                   </LoadingButton>
                   {item.quantity}
                   <LoadingButton
                     color="primary"
-                    onClick={() => {
-                      handlePlusItem(item.productId, `add ${item.productId}`);
-                    }}
-                    loading={
-                      buttonLoadingState.loading &&
-                      buttonLoadingState.buttonName === `add ${item.productId}`
-                    }
+                    onClick={() => {dispatch(addItemAsync({productId: item.productId}))}}
+                    loading={loadingState === `pendingAddItem ${item.productId}`}
                   >
                     <Add />
                   </LoadingButton>
@@ -117,18 +103,8 @@ const ShoppingCartPage = () => {
                 <TableCell align="right">
                   <LoadingButton
                     color="error"
-                    onClick={() => {
-                      handleMinusItem(
-                        item.productId,
-                        `delete ${item.productId}`,
-                        item.quantity
-                      );
-                    }}
-                    loading={
-                      buttonLoadingState.loading &&
-                      buttonLoadingState.buttonName ===
-                        `delete ${item.productId}`
-                    }
+                    onClick={() => {dispatch(removeItemAsync({productId: item.productId, quantity: item.quantity, name: 'delete'}))}}
+                    loading={loadingState === `pendingRemoveItem ${item.productId} delete`}
                   >
                     <Delete />
                   </LoadingButton>
