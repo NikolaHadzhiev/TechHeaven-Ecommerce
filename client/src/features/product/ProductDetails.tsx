@@ -11,23 +11,25 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Product } from "../../app/interfaces/product";
-import apiRequests from "../../app/api/requests";
+// import { Product } from "../../app/interfaces/product";
+// import apiRequests from "../../app/api/requests";
 import NotFound from "../../errors/NotFound";
 import LoadingComponent from "../../app/layout/LoadingComponent";
 // import { useStoreContext } from "../../app/hooks/useStoreContext";
 import { LoadingButton } from "@mui/lab";
 import { useAppDispatch, useAppSelector } from "../../app/hooks/reduxHooks";
 import { addItemAsync, removeItemAsync} from "../../app/store/slices/shoppingCartSlice";
+import { fetchProductAsync, productSelectors } from "../../app/store/slices/catalogSlice";
 
 const ProductDetails = () => {
   // const { shoppingCart, setShoppingCart, removeItemFromShoppingCart } = useStoreContext();
   const {shoppingCart, loadingState} = useAppSelector(state => state.shoppingCart);
+  const {loadingStatus: productLoadingState} = useAppSelector(state => state.catalog);
   const dispatch = useAppDispatch();
-  
   const { id } = useParams<{ id: string }>();
-  const [product, setProduct] = useState<Product | null>(null);
-  const [loading, setLoading] = useState(true);
+  const product = useAppSelector(state => productSelectors.selectById(state, id!))
+  // const [product, setProduct] = useState<Product | null>(null);
+  // const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(0);
   // const [submitting, setSubmitting] = useState(false);
 
@@ -37,13 +39,13 @@ const ProductDetails = () => {
 
   useEffect(() => {
     if (shoppingCartItem) setQuantity(shoppingCartItem.quantity);
-
-    id &&
-      apiRequests.Catalog.details(parseInt(id))
-        .then((response) => setProduct(response))
-        .catch((error) => console.log(error))
-        .finally(() => setLoading(false));
-  }, [id, shoppingCartItem]);
+    if (!product && id) dispatch(fetchProductAsync(parseInt(id)))
+    // id &&
+    //   apiRequests.Catalog.details(parseInt(id))
+    //     .then((response) => setProduct(response))
+    //     .catch((error) => console.log(error))
+    //     .finally(() => setLoading(false));
+  }, [id, shoppingCartItem, dispatch, product]);
 
   function handleChange(event: any) {
     if (event.target.value >= 0) {
@@ -76,8 +78,7 @@ const ProductDetails = () => {
     }
   }
 
-  if (loading)
-    return <LoadingComponent message="Loading product... Please wait 🥱" />;
+  if (productLoadingState.includes('pending')) return <LoadingComponent message="Loading product... Please wait 🥱" />;
 
   if (!product) return <NotFound />;
 
