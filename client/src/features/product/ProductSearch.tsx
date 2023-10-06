@@ -2,20 +2,22 @@ import { TextField } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../../app/hooks/reduxHooks";
 import { setProductParams } from "../../app/store/slices/catalogSlice";
 import { useEffect, useState } from "react";
+import { useIsMount } from "../../app/hooks/useIsMount";
 
 const ProductSearch = () => {
+  const isFirstRender = useIsMount();
   const { productParams} = useAppSelector((state) => state.catalog);
   const [search, setSearch] = useState(productParams.search);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-      if (search === undefined) return;
+      if (isFirstRender || search === undefined) return;
       const debounce = setTimeout(() => {
         dispatch(setProductParams({ search }));
     }, 1500)
 
     return () => clearTimeout(debounce)
-  }, [search, dispatch])
+  }, [search, dispatch, isFirstRender])
 
   
   return (
