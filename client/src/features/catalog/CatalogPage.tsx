@@ -26,12 +26,11 @@ const Catalog = () => {
   const products = useAppSelector(productSelectors.selectAll);
   const {
     productsLoaded,
-    loadingStatus,
     filtersLoaded,
     brands,
     types,
     productParams,
-    pagination
+    pagination,
   } = useAppSelector((state) => state.catalog);
   const dispatch = useAppDispatch();
   // const [products, setProducts] = useState<Product[]>([])
@@ -50,8 +49,7 @@ const Catalog = () => {
     if (!filtersLoaded) dispatch(fetchFiltersAsync());
   }, [filtersLoaded, dispatch]);
 
-  if (loadingStatus.includes("pending") || !pagination)
-    return <LoadingComponent message="Loading products... 🥱" />;
+  if (!filtersLoaded) return <LoadingComponent message="Loading products... 🥱" />;
 
   return (
     <Grid container columnSpacing={4}>
@@ -70,7 +68,12 @@ const Catalog = () => {
             selectedValue={productParams.orderBy}
             options={sortOptions}
             onChange={(event) =>
-              dispatch(setProductParams({ orderBy: event.target.value, resetPageNumber: false}))
+              dispatch(
+                setProductParams({
+                  orderBy: event.target.value,
+                  resetPageNumber: false,
+                })
+              )
             }
           />
         </Paper>
@@ -101,9 +104,16 @@ const Catalog = () => {
       </Grid>
       <Grid item xs={9} sx={{ display: "flex", flexDirection: "column" }}>
         <ProductList products={products} />
-        <Grid container sx={{ mt: "auto", mb: 2}}>
+        <Grid container sx={{ mt: "auto", mb: 2 }}>
           <Grid item xs={12}>
-            <AppPagination pagination={pagination} onPageChange={(page: number) => {dispatch(setPageNumber({currentPageNumber: page}))}}/>
+            {pagination && (
+              <AppPagination
+                pagination={pagination}
+                onPageChange={(page: number) => {
+                  dispatch(setPageNumber({ currentPageNumber: page }));
+                }}
+              />
+            )}
           </Grid>
         </Grid>
       </Grid>
