@@ -1,6 +1,7 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { toast } from "react-toastify";
 import { router } from "../router/Router";
+import { PaginatedResponse } from "../classes/PaginatedResponseClass";
 
 axios.defaults.baseURL = "http://localhost:5095/api/";
 axios.defaults.withCredentials = true; //Cookie would not be saved to client without this!!
@@ -12,6 +13,14 @@ const responseBody = (response: AxiosResponse) => response.data;
 axios.interceptors.response.use(
   async (response) => {
     await simulateSlowResponse() //Will remove in production
+    const pagination = response.headers['pagination-info'];
+
+    if(pagination) {
+      response.data = new PaginatedResponse(response.data, JSON.parse(pagination));
+  
+      return response;
+    }
+
     return response;
   },
   (error: AxiosError) => {

@@ -1,13 +1,4 @@
-import {
-  Box,
-  Checkbox,
-  FormControlLabel,
-  FormGroup,
-  Grid,
-  Pagination,
-  Paper,
-  Typography,
-} from "@mui/material";
+import { Grid, Paper, Typography } from "@mui/material";
 
 import { useAppDispatch, useAppSelector } from "../../app/hooks/reduxHooks";
 import LoadingComponent from "../../app/layout/LoadingComponent";
@@ -21,6 +12,8 @@ import ProductList from "../product/ProductList";
 import { useEffect } from "react";
 import ProductSearch from "../product/ProductSearch";
 import ProductSort from "../product/ProductSort";
+import ProductFilter from "../product/ProductFilter";
+import AppPagination from "../../app/layout/AppPagination";
 
 const sortOptions = [
   { value: "name", label: "Alphanetical" },
@@ -37,6 +30,7 @@ const Catalog = () => {
     brands,
     types,
     productParams,
+    pagination
   } = useAppSelector((state) => state.catalog);
   const dispatch = useAppDispatch();
   // const [products, setProducts] = useState<Product[]>([])
@@ -55,7 +49,7 @@ const Catalog = () => {
     if (!filtersLoaded) dispatch(fetchFiltersAsync());
   }, [filtersLoaded, dispatch]);
 
-  if (loadingStatus.includes("pending"))
+  if (loadingStatus.includes("pending") || !pagination)
     return <LoadingComponent message="Loading products... 🥱" />;
 
   return (
@@ -83,43 +77,32 @@ const Catalog = () => {
           Brands
         </Typography>
         <Paper sx={{ mb: 2, p: 2 }}>
-          <FormGroup>
-            {brands.map((brand) => (
-              <FormControlLabel
-                control={<Checkbox />}
-                label={brand}
-                key={brand}
-              />
-            ))}
-          </FormGroup>
+          <ProductFilter
+            items={brands}
+            checked={productParams.brands}
+            onChange={(items: string[]) =>
+              dispatch(setProductParams({ brands: items }))
+            }
+          />
         </Paper>
         <Typography variant={"h5"} sx={{ mb: 1 }}>
           Types
         </Typography>
         <Paper sx={{ mb: 2, p: 2 }}>
-          <FormGroup>
-            {types.map((type) => (
-              <FormControlLabel
-                control={<Checkbox />}
-                label={type}
-                key={type}
-              />
-            ))}
-          </FormGroup>
+          <ProductFilter
+            items={types}
+            checked={productParams.types}
+            onChange={(items: string[]) =>
+              dispatch(setProductParams({ types: items }))
+            }
+          />
         </Paper>
       </Grid>
       <Grid item xs={9} sx={{ display: "flex", flexDirection: "column" }}>
         <ProductList products={products} />
         <Grid container sx={{ mt: "auto" }}>
           <Grid item xs={12}>
-            <Box
-              display="flex"
-              justifyContent="space-between"
-              alignItems="baseline"
-            >
-              <Typography>Displaying 1-6 of 20 items</Typography>
-              <Pagination color="primary" size="large" count={10} />
-            </Box>
+            <AppPagination pagination={pagination} onPageChange={(page: number) => {dispatch(setProductParams({currentPageNumber: page}))}}/>
           </Grid>
         </Grid>
       </Grid>

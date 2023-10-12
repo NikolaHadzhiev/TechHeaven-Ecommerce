@@ -14,7 +14,7 @@ const ProductSearch = () => {
       if (isFirstRender || search === undefined) return;
       const debounce = setTimeout(() => {
         dispatch(setProductParams({ search }));
-    }, 1500)
+    }, 2000)
 
     return () => clearTimeout(debounce)
   }, [search, dispatch, isFirstRender])

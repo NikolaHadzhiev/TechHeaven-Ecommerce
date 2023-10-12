@@ -9,8 +9,8 @@ namespace API.Extensions
         {
             var options = new JsonSerializerOptions{PropertyNamingPolicy = JsonNamingPolicy.CamelCase};
 
-            responseHeaders.Add("PaginationInfo", JsonSerializer.Serialize(paginationMetaData, options));
-            responseHeaders.Add("Access-Control-Expose-Headers", "PaginationInfo"); //to make PaginationInfo header available on client
+            responseHeaders.Add("Pagination-Info", JsonSerializer.Serialize(paginationMetaData, options));
+            responseHeaders.Add("Access-Control-Expose-Headers", "Pagination-Info"); //to make PaginationInfo header available on client
         }
     }
 }

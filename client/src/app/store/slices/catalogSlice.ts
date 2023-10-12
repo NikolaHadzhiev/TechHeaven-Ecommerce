@@ -3,6 +3,7 @@ import apiRequests from "../../api/requests";
 import { Product } from "../../interfaces/product";
 import { RootState } from "../configureStrore";
 import { ProductParams } from "../../interfaces/productParams";
+import { Pagination } from "../../interfaces/pagination";
 
 interface CatalogState {
     productsLoaded: boolean;
@@ -11,6 +12,7 @@ interface CatalogState {
     brands: string[];
     types: string[];
     productParams: ProductParams;
+    pagination: Pagination | null;
 }
 
 const productsAdapter = createEntityAdapter<Product>();
@@ -32,7 +34,10 @@ export const fetchProductsAsync = createAsyncThunk<Product[], void, {state: Root
     async (_, thunkAPI) => {
         const params = getProductParams(thunkAPI.getState().catalog.productParams);
         try {
-            return await apiRequests.Catalog.list(params);
+            const response = await apiRequests.Catalog.list(params);
+            console.log(response.pagination);
+            thunkAPI.dispatch(setPagination(response.pagination))
+            return response.items;
         } catch (error: any) {
             return thunkAPI.rejectWithValue({error: error.data})
         }
@@ -77,7 +82,8 @@ export const catalogSlice = createSlice({
         filtersLoaded: false,
         brands: [],
         types: [],
-        productParams: initProductParams()
+        productParams: initProductParams(),
+        pagination: null
     }),
 
     reducers: {
@@ -87,6 +93,9 @@ export const catalogSlice = createSlice({
         },
         resetProductParams: (state, action) => {
             state.productParams = initProductParams()
+        },
+        setPagination: (state, action) => {
+            state.pagination = action.payload;
         }
     },
 
@@ -133,4 +142,4 @@ export const catalogSlice = createSlice({
 })
 
 export const productSelectors = productsAdapter.getSelectors((state: RootState) => state.catalog);
-export const {setProductParams, resetProductParams} = catalogSlice.actions;
+export const {setProductParams, resetProductParams, setPagination} = catalogSlice.actions;
