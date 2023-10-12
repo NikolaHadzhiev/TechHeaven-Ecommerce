@@ -30,9 +30,12 @@ namespace API.Extensions
             if(!string.IsNullOrEmpty(brands)) brandList.AddRange(brands.ToLower().Split(",").ToList());
             if(!string.IsNullOrEmpty(types)) typeList.AddRange(types.ToLower().Split(",").ToList());
 
-            query = query.Where(p => brandList.Count == 0 || brandList.Contains(p.Brand.ToLower()));
-            query = query.Where(p => typeList.Count == 0 || typeList.Contains(p.Type.ToLower()));
+            if(brandList.Count > 0 && typeList.Count == 0) query = query.Where(p => brandList.Contains(p.Brand.ToLower()));
 
+            if(typeList.Count > 0 && brandList.Count == 0) query = query.Where(p => typeList.Contains(p.Type.ToLower()));
+
+            if (brandList.Count > 0 && typeList.Count > 0)  query = query.Where(p => brandList.Contains(p.Brand.ToLower()) || typeList.Contains(p.Type.ToLower()));
+            
             return query;
         }
     }

@@ -6,6 +6,7 @@ import {
   fetchFiltersAsync,
   fetchProductsAsync,
   productSelectors,
+  setPageNumber,
   setProductParams,
 } from "../../app/store/slices/catalogSlice";
 import ProductList from "../product/ProductList";
@@ -53,7 +54,7 @@ const Catalog = () => {
     return <LoadingComponent message="Loading products... 🥱" />;
 
   return (
-    <Grid container spacing={4}>
+    <Grid container columnSpacing={4}>
       <Grid item xs={3}>
         <Typography variant={"h5"} sx={{ mb: 1 }}>
           Search
@@ -69,7 +70,7 @@ const Catalog = () => {
             selectedValue={productParams.orderBy}
             options={sortOptions}
             onChange={(event) =>
-              dispatch(setProductParams({ orderBy: event.target.value }))
+              dispatch(setProductParams({ orderBy: event.target.value, resetPageNumber: false}))
             }
           />
         </Paper>
@@ -100,9 +101,9 @@ const Catalog = () => {
       </Grid>
       <Grid item xs={9} sx={{ display: "flex", flexDirection: "column" }}>
         <ProductList products={products} />
-        <Grid container sx={{ mt: "auto" }}>
+        <Grid container sx={{ mt: "auto", mb: 2}}>
           <Grid item xs={12}>
-            <AppPagination pagination={pagination} onPageChange={(page: number) => {dispatch(setProductParams({currentPageNumber: page}))}}/>
+            <AppPagination pagination={pagination} onPageChange={(page: number) => {dispatch(setPageNumber({currentPageNumber: page}))}}/>
           </Grid>
         </Grid>
       </Grid>
