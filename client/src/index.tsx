@@ -7,10 +7,10 @@ import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import { RouterProvider } from "react-router-dom";
+import { store } from "./app/store/configureStrore";
 import { router } from "./app/router/Router";
 // import { StoreProvider } from "./app/context/StoreContext";
 import { Provider } from "react-redux";
-import { store } from "./app/store/configureStrore";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement

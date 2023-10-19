@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Header from "./Header";
 import {
   Container,
@@ -9,12 +9,13 @@ import {
 import { Outlet } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 // import { useStoreContext } from "../../app/hooks/useStoreContext";
-import { getCookie } from "../util/helper";
-import apiRequests from "../api/requests";
+//import { getCookie } from "../util/helper";
+//import apiRequests from "../api/requests";
 import LoadingComponent from "./LoadingComponent";
 import "react-toastify/dist/ReactToastify.css";
 import { useAppDispatch } from "../hooks/reduxHooks";
-import { setShoppingCart } from "../store/slices/shoppingCartSlice";
+import { fetchCurrentUser } from "../store/slices/accountSlice";
+import { fetchShoppingCartAsync } from "../store/slices/shoppingCartSlice";
 
 
 const App = () => {
@@ -23,18 +24,19 @@ const App = () => {
   const [loading, setLoading] = useState(true);
   const [darkMode, setDarkMode] = useState(false);
 
-  useEffect(() => {
-    const buyerId = getCookie("BUYER_ID");
-    if (buyerId) {
-      apiRequests.ShoppingCart.get()
-        // .then((shoppingCart) => setShoppingCart(shoppingCart))
-        .then((shoppingCart) => dispatch(setShoppingCart(shoppingCart)))
-        .catch((error) => console.log(error))
-        .finally(() => setLoading(false));
-    } else {
-      setLoading(false);
+  const initApp = useCallback(async () => {
+    try {
+      await dispatch(fetchCurrentUser());
+      await dispatch(fetchShoppingCartAsync());
+    } catch (error) {
+      console.log(error)
     }
-  }, [dispatch]);
+  }, [dispatch])
+
+
+  useEffect(() => {
+   initApp().then(() => setLoading(false));
+  }, [initApp]);
 
   const paletteType = darkMode ? "dark" : "light";
   const theme = createTheme({

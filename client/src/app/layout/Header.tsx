@@ -13,12 +13,13 @@ import {
 import { NavLink } from "react-router-dom";
 // import { useStoreContext } from "../../app/hooks/useStoreContext";
 import { useAppSelector } from "../hooks/reduxHooks";
+import LoginMenuHeader from "../../features/account/LoginMenuHeader";
 
 const midLinks = [
   { title: "catalog", path: "/catalog" },
   { title: "about", path: "/about" },
   { title: "contact", path: "/contact" },
-  {title: "test", path: "/error-test"}
+  { title: "test", path: "/error-test" },
 ];
 
 const rightLinks = [
@@ -40,11 +41,15 @@ interface Props {
 
 const Header = ({ darkMode, handleThemeChange }: Props) => {
   // const { shoppingCart } = useStoreContext();
-  const {shoppingCart} = useAppSelector(state => state.shoppingCart);
-  const itemsInCartCount = shoppingCart?.items.reduce((value, item) => value + item.quantity, 0);
+  const { shoppingCart } = useAppSelector((state) => state.shoppingCart);
+  const itemsInCartCount = shoppingCart?.items.reduce(
+    (value, item) => value + item.quantity,
+    0
+  );
+  const { user } = useAppSelector((state) => state.account);
 
   return (
-    <AppBar position="static" sx={{ mb: 4, backgroundColor: "#3b50b2"}}>
+    <AppBar position="static" sx={{ mb: 4, backgroundColor: "#3b50b2" }}>
       <Toolbar
         sx={{
           display: "flex",
@@ -52,7 +57,7 @@ const Header = ({ darkMode, handleThemeChange }: Props) => {
           alignItems: "center",
         }}
       >
-        <Box display='flex' alignItems='center'>
+        <Box display="flex" alignItems="center">
           <Typography
             variant="h6"
             component={NavLink}
@@ -72,20 +77,39 @@ const Header = ({ darkMode, handleThemeChange }: Props) => {
           ))}
         </List>
 
-        <Box display='flex' alignItems='center'>
-          <IconButton component={NavLink} to={'/shopping-cart'} size="large" edge="start" color="inherit" sx={{ mr: 2 }}>
-            <Badge badgeContent={itemsInCartCount?.toString()} color="secondary">
+        <Box display="flex" alignItems="center">
+          <IconButton
+            component={NavLink}
+            to={"/shopping-cart"}
+            size="large"
+            edge="start"
+            color="inherit"
+            sx={{ mr: 2 }}
+          >
+            <Badge
+              badgeContent={itemsInCartCount?.toString()}
+              color="secondary"
+            >
               <ShoppingCart />
             </Badge>
           </IconButton>
 
-          <List sx={{ display: "flex" }}>
-            {rightLinks.map(({ title, path }) => (
-              <ListItem component={NavLink} to={path} key={path} sx={navStyles}>
-                {title.toUpperCase()}
-              </ListItem>
-            ))}
-          </List>
+          {user ? (
+            <LoginMenuHeader />
+          ) : (
+            <List sx={{ display: "flex" }}>
+              {rightLinks.map(({ title, path }) => (
+                <ListItem
+                  component={NavLink}
+                  to={path}
+                  key={path}
+                  sx={navStyles}
+                >
+                  {title.toUpperCase()}
+                </ListItem>
+              ))}
+            </List>
+          )}
         </Box>
       </Toolbar>
     </AppBar>

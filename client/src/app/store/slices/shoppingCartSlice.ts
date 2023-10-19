@@ -1,6 +1,7 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, isAnyOf } from "@reduxjs/toolkit";
 import { ShoppingCart } from "../../interfaces/shoppingCart";
 import apiRequests from "../../api/requests";
+import { getCookie } from "../../util/helper";
 
 interface ShoppingCartState {
     shoppingCart: ShoppingCart | null,
@@ -11,6 +12,21 @@ const initialState: ShoppingCartState = {
     shoppingCart: null,
     loadingState: 'idle'
 }
+
+export const fetchShoppingCartAsync = createAsyncThunk<ShoppingCart>(
+    "shoppingCart/fetchShoppingCartAsync",
+    async (_, thunkApi) => {
+        try {
+            return await apiRequests.ShoppingCart.get();
+        }catch (error: any) {
+            return thunkApi.rejectWithValue({error: error.data})
+        }
+    }, {
+        condition: () => {
+            if(!getCookie('BUYER_ID')) return false;
+        }
+    }
+)
 
 export const addItemAsync = createAsyncThunk<ShoppingCart, {productId: number, quantity?: number}>(
     'shoppingCart/addItemAsync',
@@ -47,13 +63,7 @@ export const shoppingCartSlice = createSlice({
         builder.addCase(addItemAsync.pending, (state, action) => {
             state.loadingState = `pendingAddItem ${action.meta.arg.productId}`;
         })
-        builder.addCase(addItemAsync.fulfilled, (state, action) => {
-            state.shoppingCart = action.payload;
-            state.loadingState = 'idle';
-        })
-        builder.addCase(addItemAsync.rejected, (state) => {
-            state.loadingState = 'idle';
-        })
+        
 
         //removeItemAsync
         builder.addCase(removeItemAsync.pending, (state, action) => {
@@ -74,6 +84,14 @@ export const shoppingCartSlice = createSlice({
             state.loadingState = 'idle'
         })
         builder.addCase(removeItemAsync.rejected, (state) => {
+            state.loadingState = 'idle';
+        })
+
+        builder.addMatcher(isAnyOf(addItemAsync.fulfilled, fetchShoppingCartAsync.fulfilled), (state, action) => {
+            state.shoppingCart = action.payload;
+            state.loadingState = 'idle';
+        })
+        builder.addMatcher(isAnyOf(addItemAsync.rejected, fetchShoppingCartAsync.rejected), (state) => {
             state.loadingState = 'idle';
         })
     })

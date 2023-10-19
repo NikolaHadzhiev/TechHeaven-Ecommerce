@@ -2,6 +2,7 @@ import axios, { AxiosError, AxiosResponse } from "axios";
 import { toast } from "react-toastify";
 import { router } from "../router/Router";
 import { PaginatedResponse } from "../classes/PaginatedResponseClass";
+import { store } from "../store/configureStrore";
 
 axios.defaults.baseURL = "http://localhost:5095/api/";
 axios.defaults.withCredentials = true; //Cookie would not be saved to client without this!!
@@ -9,6 +10,14 @@ axios.defaults.withCredentials = true; //Cookie would not be saved to client wit
 const simulateSlowResponse = () => new Promise(resolve => setTimeout(resolve, 500))
 
 const responseBody = (response: AxiosResponse) => response.data;
+
+axios.interceptors.request.use(config => {
+  
+  const token = store.getState().account.user?.token;
+  if(token) config.headers.Authorization = `Bearer ${token}`;
+
+  return config;
+})
 
 axios.interceptors.response.use(
   async (response) => {
@@ -80,6 +89,12 @@ const ShoppingCart = {
   removeItem: (productId: number, quantity = 1) => requests.del(`shoppingCart?productId=${productId}&quantity=${quantity}`)
 }
 
+const Account = {
+  login: (values: any) => requests.post('account/login', values),
+  register: (values: any) => requests.post('account/register', values),
+  currentUser: () => requests.get('account/currentUser')
+}
+
 //Testing purposes - may be deleted after development
 const TestErrors = {
   get400Error: () => requests.get("error/bad-request"),
@@ -92,7 +107,8 @@ const TestErrors = {
 const apiRequests = {
   Catalog,
   TestErrors,
-  ShoppingCart
+  ShoppingCart,
+  Account
 };
 
 export default apiRequests;
