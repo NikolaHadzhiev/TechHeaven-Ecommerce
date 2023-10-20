@@ -56,6 +56,9 @@ export const shoppingCartSlice = createSlice({
     reducers: {
         setShoppingCart: (state, action) => {
             state.shoppingCart = action.payload
+        },
+        clearShoppingCart: (state) => {
+            state.shoppingCart = null;
         }
     },
     extraReducers: (builder => {
@@ -97,4 +100,4 @@ export const shoppingCartSlice = createSlice({
     })
 })
 
-export const {setShoppingCart} = shoppingCartSlice.actions;
+export const {setShoppingCart, clearShoppingCart} = shoppingCartSlice.actions;

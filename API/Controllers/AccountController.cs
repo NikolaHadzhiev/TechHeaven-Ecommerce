@@ -44,7 +44,7 @@ namespace API.Controllers
             {
                 Email = user.Email,
                 Token = await _tokenService.GenerateToken(user),
-                ShoppingCart = anonymousShoppingCart != null ? anonymousShoppingCart.DTO_MAPPING() : userShoppingCart.DTO_MAPPING()
+                ShoppingCart = anonymousShoppingCart != null ? anonymousShoppingCart.DTO_MAPPING() : userShoppingCart?.DTO_MAPPING()
             };
         }
 
@@ -77,11 +77,13 @@ namespace API.Controllers
         public async Task<ActionResult<UserDTO>> GetCurrentUser()
         {
             var user = await _userManager.FindByNameAsync(User.Identity.Name);
+            var userShoppingCart = await GetShoppingCartFn(User.Identity.Name);
 
             return new UserDTO
             {
                 Email = user.Email,
-                Token = Request.Headers[HeaderNames.Authorization]
+                Token = Request.Headers[HeaderNames.Authorization],
+                ShoppingCart = userShoppingCart?.DTO_MAPPING() 
             };
         }
 

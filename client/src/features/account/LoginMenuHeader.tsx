@@ -2,6 +2,7 @@ import { Button, Fade, Menu, MenuItem } from "@mui/material";
 import React, { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks/reduxHooks";
 import { signOut } from "../../app/store/slices/accountSlice";
+import { clearShoppingCart } from "../../app/store/slices/shoppingCartSlice";
 
 const LoginMenuHeader = () => {
     const dispatch = useAppDispatch();
@@ -29,7 +30,10 @@ const LoginMenuHeader = () => {
         >
           <MenuItem onClick={handleClose}>Profile</MenuItem>
           <MenuItem onClick={handleClose}>My orders</MenuItem>
-          <MenuItem onClick={() => dispatch(signOut())}>Logout</MenuItem>
+          <MenuItem onClick={() => {
+              dispatch(signOut())
+              dispatch(clearShoppingCart())
+          }}>Logout</MenuItem>
         </Menu>
       </>
     )

@@ -12,26 +12,30 @@ import NotFound from "../../errors/NotFound";
 import ShoppingCartPage from "../../features/shoppingCart/ShoppingCartPage";
 import CheckoutPage from "../../features/checkout/CheckoutPage";
 import RegisterPage from "../../features/account/RegisterPage";
-import LoginPage  from "../../features/account/LoginPage";
+import LoginPage from "../../features/account/LoginPage";
+import Auth from "../../features/auth/Auth";
 
 export const router = createBrowserRouter([
-    {
-        path: "/",
-        element: <App />,
-        children: [
-            {path: "", element: <HomePage />},
-            {path: "login", element: <LoginPage />},
-            {path: "register", element: <RegisterPage />},
-            {path: "catalog", element: <Catalog />},
-            {path: "catalog/:id", element: <ProductDetails />},
-            {path: "shopping-cart", element: <ShoppingCartPage />},
-            {path: "checkout", element: <CheckoutPage />},
-            {path: "about", element: <AboutPage />},
-            {path: "contact", element: <ContactPage />},
-            {path: "error-test", element: <TestPage />},
-            {path: "server-error", element: <ServerError />},
-            {path: 'not-found', element: <NotFound />},
-            {path: "*", element: <Navigate replace to="/not-found" />}
-        ]
-    }
-])
+  {
+    path: "/",
+    element: <App />,
+    children: [
+      {
+        element: <Auth />,
+        children: [{ path: "checkout", element: <CheckoutPage /> }],
+      },
+      { path: "", element: <HomePage /> },
+      { path: "login", element: <LoginPage /> },
+      { path: "register", element: <RegisterPage /> },
+      { path: "catalog", element: <Catalog /> },
+      { path: "catalog/:id", element: <ProductDetails /> },
+      { path: "shopping-cart", element: <ShoppingCartPage /> },
+      { path: "about", element: <AboutPage /> },
+      { path: "contact", element: <ContactPage /> },
+      { path: "error-test", element: <TestPage /> },
+      { path: "server-error", element: <ServerError /> },
+      { path: "not-found", element: <NotFound /> },
+      { path: "*", element: <Navigate replace to="/not-found" /> },
+    ],
+  },
+]);

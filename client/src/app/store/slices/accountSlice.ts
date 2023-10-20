@@ -4,6 +4,7 @@ import { FieldValues } from "react-hook-form";
 import apiRequests from "../../api/requests";
 import { router } from "../../router/Router";
 import { toast } from "react-toastify";
+import { setShoppingCart } from "./shoppingCartSlice";
 
 interface AccountState {
   user: User | null;
@@ -17,7 +18,9 @@ export const signInUser = createAsyncThunk<User, FieldValues>(
   "account/signInUser",
   async (data, thunkAPI) => {
     try {
-        const user = await apiRequests.Account.login(data);
+        const userData = await apiRequests.Account.login(data);
+        const {shoppingCart, ...user} = userData;
+        if(shoppingCart) thunkAPI.dispatch(setShoppingCart(shoppingCart));
         localStorage.setItem('user', JSON.stringify(user));
 
         return user;
@@ -33,10 +36,14 @@ export const fetchCurrentUser = createAsyncThunk<User>(
     
         thunkAPI.dispatch(setUser(JSON.parse(localStorage.getItem('user')!)));
         try {
-            const user = await apiRequests.Account.currentUser();
-            localStorage.setItem('user', JSON.stringify(user));
+
+          const userData = await apiRequests.Account.currentUser();
+          const {shoppingCart, ...user} = userData;
+              
+          localStorage.setItem('user', JSON.stringify(user));
   
           return user;
+
       } catch (error: any) {
           return thunkAPI.rejectWithValue({error: error.data})
       }
@@ -75,7 +82,7 @@ export const accountSlice = createSlice({
     });
 
     builder.addMatcher(isAnyOf(signInUser.rejected), (state, action) => {
-        console.log(action.payload)
+        throw action.payload
     })
   })
 });

@@ -45,7 +45,7 @@ const Header = ({ darkMode, handleThemeChange }: Props) => {
   const itemsInCartCount = shoppingCart?.items.reduce(
     (value, item) => value + item.quantity,
     0
-  );
+  ) || 0;
   const { user } = useAppSelector((state) => state.account);
 
   return (

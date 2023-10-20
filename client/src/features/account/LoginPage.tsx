@@ -2,20 +2,26 @@ import { LockOutlined } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
 import { Container, Paper, Avatar, Typography, Box, TextField, Grid } from "@mui/material";
 import { FieldValues, useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../../app/hooks/reduxHooks";
 import { signInUser } from "../../app/store/slices/accountSlice";
 
 const LoginPage = () => {
 
     const navigate = useNavigate();
+    const location = useLocation();
+
     const dispatch = useAppDispatch();
 
     const {register, handleSubmit, formState: {isSubmitting, errors, isValid}} = useForm({mode: 'onTouched'});
 
     async function submitForm(data: FieldValues) {
-       await dispatch(signInUser(data));
-       navigate("/catalog");
+        try{
+            await dispatch(signInUser(data));
+            navigate(location.state?.from || '/catalog');
+        }catch (error) {
+            console.log(error);
+        }
     }
 
     return (
