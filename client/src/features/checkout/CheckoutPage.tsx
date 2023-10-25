@@ -7,11 +7,17 @@ import {
   Box,
   Button,
 } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AddressForm from "./AddressForm";
 import PaymentForm from "./PaymentForm";
 import Review from "./Review";
-import { FormProvider, useForm } from "react-hook-form";
+import { FieldValues, FormProvider, useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup"
+import { validationSchema } from "./validation/checkoutValidation";
+import apiRequests from "../../app/api/requests";
+import { useAppDispatch } from "../../app/hooks/reduxHooks";
+import { clearShoppingCart } from "../../app/store/slices/shoppingCartSlice";
+import { LoadingButton } from "@mui/lab";
 
 const steps = ["Shipping address", "Review your order", "Payment details"];
 
@@ -29,11 +35,42 @@ function getStepContent(step: number) {
 }
 
 const CheckoutPage = () => {
-  const methods = useForm();
   const [activeStep, setActiveStep] = useState(0);
+  const [orderNumber, setOrderNumber] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const dispatch = useAppDispatch(); 
 
-  const handleNext = () => {
-    setActiveStep(activeStep + 1);
+  const currentValidationSchema = validationSchema[activeStep];
+  const methods = useForm({mode: 'onTouched', resolver: yupResolver(currentValidationSchema)});
+
+  useEffect(() => {
+    apiRequests.Account.savedAddress().then(res => {
+      if(res){
+        methods.reset({...methods.getValues(), ...res, saveAddress: false})
+      }
+    })
+  }, [methods])
+
+  const handleNext = async (data: FieldValues) => {
+    const {nameOnCard, saveAddress, ...shippingAddress} = data;
+
+    if(activeStep === steps.length - 1) {
+      setLoading(true);
+      try {
+        const orderNumber = await apiRequests.Orders.createOrder({saveAddress, shippingAddress});
+         
+        setOrderNumber(orderNumber);
+        setActiveStep(activeStep + 1);
+
+        dispatch(clearShoppingCart());
+        setLoading(false);
+      }catch(error) {
+        console.log(error);
+        setLoading(false);
+      }
+    } else {
+      setActiveStep(activeStep + 1);
+    }
   };
 
   const handleBack = () => {
@@ -63,9 +100,7 @@ const CheckoutPage = () => {
                 Thank you for your order.
               </Typography>
               <Typography variant="subtitle1">
-                Your order number is #2001539. We have emailed your order
-                confirmation, and will send you an update when your order has
-                shipped.
+                Your order number is #{orderNumber}. We will update your order status when your order has been shipped.
               </Typography>
             </>
           ) : (
@@ -77,9 +112,9 @@ const CheckoutPage = () => {
                     Back
                   </Button>
                 )}
-                <Button variant="contained" type="submit" sx={{ mt: 3, ml: 1 }}>
+                <LoadingButton loading={loading} disabled={!methods.formState.isValid} variant="contained" type="submit" sx={{ mt: 3, ml: 1 }}>
                   {activeStep === steps.length - 1 ? "Place order" : "Next"}
-                </Button>
+                </LoadingButton>
               </Box>
             </form>
           )}

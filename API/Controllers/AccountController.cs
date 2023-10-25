@@ -71,7 +71,6 @@ namespace API.Controllers
             return StatusCode(201);
         }
 
-        //Test purposes for authentication and authorizaton
         [Authorize]
         [HttpGet("currentUser")]
         public async Task<ActionResult<UserDTO>> GetCurrentUser()
@@ -87,6 +86,15 @@ namespace API.Controllers
             };
         }
 
+        [Authorize]
+        [HttpGet("savedAddress")]
+        public async Task<ActionResult<UserAddress>> GetSavedAddress()
+        {
+            return await _userManager.Users
+            .Where(x => x.UserName == User.Identity.Name)
+            .Select(user => user.Address)
+            .FirstOrDefaultAsync();
+        }
         private async Task<ShoppingCart> GetShoppingCartFn(string buyerId)
         {
             if (string.IsNullOrEmpty(buyerId))

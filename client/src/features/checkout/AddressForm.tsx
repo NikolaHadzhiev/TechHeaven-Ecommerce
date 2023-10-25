@@ -7,7 +7,7 @@ import AppTextInput from "../../app/reusable/AppTextInput";
 import AppCheckbox from "../../app/reusable/AppCheckbox";
 
 const AddressForm = () => {
-  const { control } = useFormContext(); //save Input values after sumbitting between component renders
+  const { control, formState } = useFormContext(); //save Input values after sumbitting between component renders
 
   return (
     <>
@@ -37,7 +37,7 @@ const AddressForm = () => {
         <AppTextInput control={control} name='country' label='Country' />
         </Grid>
         <Grid item xs={12}>
-          <AppCheckbox name='saveAddress' label="Save this as the default address" control={control}/>
+          <AppCheckbox disabled={!formState.isDirty} name='saveAddress' label="Save this as the default address" control={control}/>
         </Grid>
       </Grid>
     </>

@@ -92,9 +92,15 @@ const ShoppingCart = {
 const Account = {
   login: (values: any) => requests.post('account/login', values),
   register: (values: any) => requests.post('account/register', values),
-  currentUser: () => requests.get('account/currentUser')
+  currentUser: () => requests.get('account/currentUser'),
+  savedAddress: () => requests.get('account/savedAddress')
 }
 
+const Orders = {
+  list: () => requests.get("orders"),
+  fetchOrder: (id: number) => requests.get(`orders/${id}`),
+  createOrder: (values: any) => requests.post("orders", values)
+}
 //Testing purposes - may be deleted after development
 const TestErrors = {
   get400Error: () => requests.get("error/bad-request"),
@@ -108,7 +114,8 @@ const apiRequests = {
   Catalog,
   TestErrors,
   ShoppingCart,
-  Account
+  Account,
+  Orders
 };
 
 export default apiRequests;
