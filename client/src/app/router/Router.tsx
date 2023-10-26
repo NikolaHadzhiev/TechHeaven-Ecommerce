@@ -14,6 +14,7 @@ import CheckoutPage from "../../features/checkout/CheckoutPage";
 import RegisterPage from "../../features/account/RegisterPage";
 import LoginPage from "../../features/account/LoginPage";
 import Auth from "../../features/auth/Auth";
+import OrdersPage from "../../features/order/OrdersPage";
 
 export const router = createBrowserRouter([
   {
@@ -22,8 +23,10 @@ export const router = createBrowserRouter([
     children: [
       {
         element: <Auth />,
-        children: [{ path: "checkout", element: <CheckoutPage /> }],
-      },
+        children: [
+          { path: "checkout", element: <CheckoutPage /> },
+          { path: "orders", element: <OrdersPage /> }
+      ]},
       { path: "", element: <HomePage /> },
       { path: "login", element: <LoginPage /> },
       { path: "register", element: <RegisterPage /> },

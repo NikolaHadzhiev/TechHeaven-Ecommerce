@@ -2,12 +2,17 @@ import { TableContainer, Paper, Table, TableBody, TableRow, TableCell } from "@m
 // import { useStoreContext } from "../../app/hooks/useStoreContext";
 import { useAppSelector } from "../../app/hooks/reduxHooks";
 
-const OrderSummary = () =>  {
+interface Props {
+    subtotal?: number;
+}
+
+const OrderSummary = ({ subtotal }: Props) =>  {
     // const {shoppingCart} = useStoreContext();
     const {shoppingCart} = useAppSelector(state => state.shoppingCart);
-    const subtotal = shoppingCart?.items.reduce((value, item) => value + (item.quantity * item.price), 0) ?? 0;
-    const deliveryFee = subtotal > 5000 ? 0 : 500;
 
+    if(subtotal === undefined) subtotal = shoppingCart?.items.reduce((value, item) => value + (item.quantity * item.price), 0) ?? 0;
+    
+    const deliveryFee = subtotal > 5000 ? 0 : 500;
 
     return (
         <>

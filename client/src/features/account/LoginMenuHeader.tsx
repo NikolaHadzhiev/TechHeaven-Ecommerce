@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks/reduxHooks";
 import { signOut } from "../../app/store/slices/accountSlice";
 import { clearShoppingCart } from "../../app/store/slices/shoppingCartSlice";
+import { Link } from "react-router-dom";
 
 const LoginMenuHeader = () => {
     const dispatch = useAppDispatch();
@@ -29,7 +30,7 @@ const LoginMenuHeader = () => {
           TransitionComponent={Fade}
         >
           <MenuItem onClick={handleClose}>Profile</MenuItem>
-          <MenuItem onClick={handleClose}>My orders</MenuItem>
+          <MenuItem component={Link} to='/orders' onClick={handleClose}>My orders</MenuItem>
           <MenuItem onClick={() => {
               dispatch(signOut())
               dispatch(clearShoppingCart())
