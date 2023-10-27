@@ -12,6 +12,8 @@ namespace API.Extensions
             {
                 Id = shoppingCart.Id,
                 BuyerId = shoppingCart.BuyerId,
+                PaymentIntentId = shoppingCart.PaymentIntentId,
+                ClientSecret = shoppingCart.ClientSecret,
                 Items = shoppingCart.Items.Select(item => new ShoppingCartItemDTO
                 {
                     ProductId = item.ProductId,
