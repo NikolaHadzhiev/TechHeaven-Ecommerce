@@ -2,7 +2,6 @@ import { Navigate, createBrowserRouter } from "react-router-dom";
 import Catalog from "../../features/catalog/CatalogPage";
 import ProductDetails from "../../features/product/ProductDetails";
 import AboutPage from "../../features/about/AboutPage";
-
 import HomePage from "../../features/home/HomePage";
 import App from "../layout/App";
 import ContactPage from "../../features/contact/ContactPage";
@@ -10,11 +9,11 @@ import TestPage from "../../features/component-test/TestPage";
 import ServerError from "../../errors/ServerError";
 import NotFound from "../../errors/NotFound";
 import ShoppingCartPage from "../../features/shoppingCart/ShoppingCartPage";
-import CheckoutPage from "../../features/checkout/CheckoutPage";
 import RegisterPage from "../../features/account/RegisterPage";
 import LoginPage from "../../features/account/LoginPage";
 import Auth from "../../features/auth/Auth";
 import OrdersPage from "../../features/order/OrdersPage";
+import CheckoutWrapper from "../../features/checkout/CheckoutWrapper";
 
 export const router = createBrowserRouter([
   {
@@ -24,7 +23,7 @@ export const router = createBrowserRouter([
       {
         element: <Auth />,
         children: [
-          { path: "checkout", element: <CheckoutPage /> },
+          { path: "checkout", element: <CheckoutWrapper /> },
           { path: "orders", element: <OrdersPage /> }
       ]},
       { path: "", element: <HomePage /> },

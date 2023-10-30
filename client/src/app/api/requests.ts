@@ -101,6 +101,11 @@ const Orders = {
   fetchOrder: (id: number) => requests.get(`orders/${id}`),
   createOrder: (values: any) => requests.post("orders", values)
 }
+
+const Payments = {
+  createPaymentIntent: () => requests.post('payments', {})
+}
+
 //Testing purposes - may be deleted after development
 const TestErrors = {
   get400Error: () => requests.get("error/bad-request"),
@@ -115,7 +120,8 @@ const apiRequests = {
   TestErrors,
   ShoppingCart,
   Account,
-  Orders
+  Orders,
+  Payments
 };
 
 export default apiRequests;
