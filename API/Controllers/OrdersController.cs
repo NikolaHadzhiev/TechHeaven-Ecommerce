@@ -67,7 +67,7 @@ namespace API.Controllers
                 };
 
                 items.Add(orderItem);
-                // productItem.QuantityInStock -= item.ItemQuantity;
+                productItem.QuantityInStock -= item.ItemQuantity;
             }
 
             var subtotal = items.Sum(i => i.Price * i.Quantity);

@@ -49,7 +49,7 @@ const Header = ({ darkMode, handleThemeChange }: Props) => {
   const { user } = useAppSelector((state) => state.account);
 
   return (
-    <AppBar position="static" sx={{ mb: 4, backgroundColor: "#3b50b2" }}>
+    <AppBar position="static" sx={{backgroundColor: "#3b50b2" }}>
       <Toolbar
         sx={{
           display: "flex",
