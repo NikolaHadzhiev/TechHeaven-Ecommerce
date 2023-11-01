@@ -4,7 +4,7 @@ import { router } from "../router/Router";
 import { PaginatedResponse } from "../classes/PaginatedResponseClass";
 import { store } from "../store/configureStrore";
 
-axios.defaults.baseURL = "http://localhost:5095/api/";
+axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 axios.defaults.withCredentials = true; //Cookie would not be saved to client without this!!
 //Simulates slow responses (ONLY FOR DEVELOPMENT PURPOSES)
 const simulateSlowResponse = () => new Promise(resolve => setTimeout(resolve, 500))
@@ -21,7 +21,7 @@ axios.interceptors.request.use(config => {
 
 axios.interceptors.response.use(
   async (response) => {
-    await simulateSlowResponse() //Will remove in production
+    if(process.env.NODE_ENV === 'development') await simulateSlowResponse() //Will remove in production
     const pagination = response.headers['pagination-info'];
 
     if(pagination) {

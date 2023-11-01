@@ -81,7 +81,7 @@ namespace API.Controllers
             return new UserDTO
             {
                 Email = user.Email,
-                Token = Request.Headers[HeaderNames.Authorization],
+                Token = Request.Headers[HeaderNames.Authorization].ToString().Split("Bearer ")[1],
                 ShoppingCart = userShoppingCart?.DTO_MAPPING() 
             };
         }
