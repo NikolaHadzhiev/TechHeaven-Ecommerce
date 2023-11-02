@@ -1,0 +1,23 @@
+# fly.toml app configuration file generated for techheaven on 2023-11-01T23:34:47+02:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = "techheaven"
+primary_region = "otp"
+
+[build]
+  image = "nikolahadzhiev/techheaven:latest"
+
+[env]
+  ASPNETCORE_URLS="http://+:8080"
+  StripeSettings__PublishableKey="pk_test_51O5qUzBi5vHu526NBvuS3HK8YOlYAdq78fVtBI6w2n2xKgtoWPUqp5y97tm8ipVTc7vWiJ9z2XUdGhJ4MtXTo8Y500D0dB15pm"
+  
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ["app"]
