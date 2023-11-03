@@ -38,7 +38,11 @@ namespace API.Controllers
             shoppingCart.PaymentIntentId = shoppingCart.PaymentIntentId ?? intent.Id;
             shoppingCart.ClientSecret = shoppingCart.ClientSecret ?? intent.ClientSecret;
 
-            await _context.SaveChangesAsync();
+            _context.Update(shoppingCart);
+
+            var result = await _context.SaveChangesAsync() > 0;
+
+            if (!result) return BadRequest(new ProblemDetails { Title = "Problem updating basket with intent" });
 
             return shoppingCart.DTO_MAPPING();
         }
