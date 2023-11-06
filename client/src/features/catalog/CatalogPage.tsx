@@ -3,18 +3,15 @@ import { Grid, Paper, Typography } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../../app/hooks/reduxHooks";
 import LoadingComponent from "../../app/layout/LoadingComponent";
 import {
-  fetchFiltersAsync,
-  fetchProductsAsync,
-  productSelectors,
   setPageNumber,
   setProductParams,
 } from "../../app/store/slices/catalogSlice";
 import ProductList from "../product/ProductList";
-import { useEffect } from "react";
 import ProductSearch from "../product/ProductSearch";
 import ProductSort from "../product/ProductSort";
 import ProductFilter from "../product/ProductFilter";
 import AppPagination from "../../app/layout/AppPagination";
+import { useProducts } from "../../app/hooks/useProducts";
 
 const sortOptions = [
   { value: "name", label: "Alphanetical" },
@@ -23,33 +20,12 @@ const sortOptions = [
 ];
 
 const Catalog = () => {
-  const products = useAppSelector(productSelectors.selectAll);
-  const {
-    productsLoaded,
-    filtersLoaded,
-    brands,
-    types,
-    productParams,
-    pagination,
-  } = useAppSelector((state) => state.catalog);
+  const { products, brands, types, filtersLoaded, pagination } = useProducts();
+  const { productParams } = useAppSelector((state) => state.catalog);
   const dispatch = useAppDispatch();
-  // const [products, setProducts] = useState<Product[]>([])
-  // const [loading, setLoading] = useState(true);
 
-  //use two useEffect hooks to prevent multiple dependencies and multiple API requests
-  useEffect(() => {
-    // apiRequests.Catalog.list()
-    //         .then(products => setProducts(products))
-    //         .catch(error => console.log(error))
-    //         .finally(() => setLoading(false))
-    if (!productsLoaded) dispatch(fetchProductsAsync());
-  }, [productsLoaded, dispatch]);
-
-  useEffect(() => {
-    if (!filtersLoaded) dispatch(fetchFiltersAsync());
-  }, [filtersLoaded, dispatch]);
-
-  if (!filtersLoaded) return <LoadingComponent message="Loading products... 🥱" />;
+  if (!filtersLoaded)
+    return <LoadingComponent message="Loading products... 🥱" />;
 
   return (
     <Grid container columnSpacing={4}>

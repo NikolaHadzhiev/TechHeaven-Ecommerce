@@ -42,14 +42,12 @@ interface Props {
 const Header = ({ darkMode, handleThemeChange }: Props) => {
   // const { shoppingCart } = useStoreContext();
   const { shoppingCart } = useAppSelector((state) => state.shoppingCart);
-  const itemsInCartCount = shoppingCart?.items.reduce(
-    (value, item) => value + item.quantity,
-    0
-  ) || 0;
+  const itemsInCartCount =
+    shoppingCart?.items.reduce((value, item) => value + item.quantity, 0) || 0;
   const { user } = useAppSelector((state) => state.account);
 
   return (
-    <AppBar position="static" sx={{backgroundColor: "#3b50b2" }}>
+    <AppBar position="static" sx={{ backgroundColor: "#3b50b2" }}>
       <Toolbar
         sx={{
           display: "flex",
@@ -75,6 +73,11 @@ const Header = ({ darkMode, handleThemeChange }: Props) => {
               {title.toUpperCase()}
             </ListItem>
           ))}
+          {user && (
+            <ListItem component={NavLink} to={"/inventory"} sx={navStyles}>
+              INVENTORY
+            </ListItem>
+          )}
         </List>
 
         <Box display="flex" alignItems="center">

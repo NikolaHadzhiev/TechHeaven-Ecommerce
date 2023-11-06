@@ -13,6 +13,7 @@ import LoginPage from "../../features/account/LoginPage";
 import Auth from "../../features/auth/Auth";
 import OrdersPage from "../../features/order/OrdersPage";
 import CheckoutWrapper from "../../features/checkout/CheckoutWrapper";
+import InventoryPage from "../../features/admin/InventoryPage";
 
 export const router = createBrowserRouter([
   {
@@ -23,7 +24,8 @@ export const router = createBrowserRouter([
         element: <Auth />,
         children: [
           { path: "checkout", element: <CheckoutWrapper /> },
-          { path: "orders", element: <OrdersPage /> }
+          { path: "orders", element: <OrdersPage /> },
+          { path: "inventory", element: <InventoryPage /> },
       ]},
       { path: "login", element: <LoginPage /> },
       { path: "register", element: <RegisterPage /> },
