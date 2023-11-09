@@ -19,7 +19,6 @@ const midLinks = [
   { title: "catalog", path: "/catalog" },
   { title: "about", path: "/about" },
   { title: "contact", path: "/contact" },
-  { title: "test", path: "/error-test" },
 ];
 
 const rightLinks = [
@@ -73,9 +72,16 @@ const Header = ({ darkMode, handleThemeChange }: Props) => {
               {title.toUpperCase()}
             </ListItem>
           ))}
-          {user && (
+
+          {user && user.roles?.includes('Admin') && (
             <ListItem component={NavLink} to={"/inventory"} sx={navStyles}>
               INVENTORY
+            </ListItem>
+          )}
+
+          {user && user.roles?.includes('Admin') && (
+            <ListItem component={NavLink} to={"/error-test"} sx={navStyles}>
+              TEST
             </ListItem>
           )}
         </List>

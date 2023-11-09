@@ -3,6 +3,7 @@ import { toast } from "react-toastify";
 import { router } from "../router/Router";
 import { PaginatedResponse } from "../classes/PaginatedResponseClass";
 import { store } from "../store/configureStrore";
+import { createFormData } from "../util/helper";
 
 axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 axios.defaults.withCredentials = true; //Cookie would not be saved to client without this!!
@@ -59,6 +60,9 @@ axios.interceptors.response.use(
         toast.error(data.title);
         router.navigate("/not-found");
         break;
+      case 403: 
+        toast.error("You are not allowed to do that!");
+        break;
       case 500:
         toast.error(data.title);
         router.navigate("/server-error");
@@ -75,7 +79,19 @@ const requests = {
   post: (url: string, body: {} = {}) => axios.post(url, body).then(responseBody),
   put: (url: string, body: {} = {}) => axios.put(url, body).then(responseBody),
   del: (url: string) => axios.delete(url).then(responseBody),
+  postForm: (url: string, data: FormData) => axios.post(url, data, {
+    headers: {'Content-type': 'multipart/form-data'}
+  }).then(responseBody),
+  putForm: (url: string, data: FormData) => axios.put(url, data, {
+    headers: {'Content-type': 'multipart/form-data'}
+  }).then(responseBody)
 };
+
+const Admin = {
+  createProduct: (product: any) => requests.postForm('products', createFormData(product)),
+  updateProduct: (product: any) => requests.putForm('products', createFormData(product)),
+  deleteProduct: (id: number) => requests.del(`products/${id}`)
+}
 
 const Catalog = {
   list: (params: URLSearchParams) => requests.get("products", params),
@@ -121,7 +137,8 @@ const apiRequests = {
   ShoppingCart,
   Account,
   Orders,
-  Payments
+  Payments,
+  Admin
 };
 
 export default apiRequests;

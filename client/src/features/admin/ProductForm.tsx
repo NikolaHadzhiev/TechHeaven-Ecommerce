@@ -6,6 +6,12 @@ import AppTextInput from "../../app/reusable/AppTextInput";
 import { useProducts } from "../../app/hooks/useProducts";
 import AppSelectList from "../../app/reusable/AppSelectList";
 import AppDropzone from "../../app/reusable/AppDropzone";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { validationSchema } from "./validation/productValidation";
+import apiRequests from "../../app/api/requests";
+import { useAppDispatch } from "../../app/hooks/reduxHooks";
+import { setProduct } from "../../app/store/slices/catalogSlice";
+import { LoadingButton } from "@mui/lab";
 
 interface Props {
   product?: Product;
@@ -13,15 +19,34 @@ interface Props {
 }
 
 const ProductForm = ({ product, cancelEdit }: Props) => {
-  const { control, reset, handleSubmit } = useForm();
+  const { control, reset, handleSubmit, watch, formState: {isDirty, isSubmitting} } = useForm({resolver: yupResolver<any>(validationSchema)});
   const { brands, types } = useProducts();
+  const watchFile = watch("file", null);
+  const dispatch = useAppDispatch(); 
 
   useEffect(() => {
-    if (product) reset(product);
-  }, [product, reset]);
+    if (product && !watchFile && !isDirty) reset(product);
 
-  function handleSubmitData(data: FieldValues) {
-    console.log(data);
+    return () => {
+      if(watchFile != null) URL.revokeObjectURL(watchFile.preview); //becaue the URL lifetime is tied to the document in the window on which it was created, we call this to prevent memory leak
+    }
+  }, [product, reset, watchFile, isDirty]);
+
+  async function handleSubmitData(data: FieldValues) {
+    try {
+      let response: Product;
+
+      if(product) {
+        response = await apiRequests.Admin.updateProduct(data);
+      }else {
+        response = await apiRequests.Admin.createProduct(data);
+      }
+
+      dispatch(setProduct(response));
+      cancelEdit();
+    }catch(err) {
+      console.log(err);
+    }
   }
 
   return (
@@ -76,16 +101,35 @@ const ProductForm = ({ product, cancelEdit }: Props) => {
             />
           </Grid>
           <Grid item xs={12}>
-            <AppDropzone control={control} name="file" />
+            <Box
+              display="flex"
+              justifyContent="space-between"
+              alignItems="center"
+            >
+              <AppDropzone control={control} name="file" />
+              {watchFile ? (
+                <img
+                  src={watchFile.preview}
+                  alt="preview"
+                  style={{ maxHeight: 200 }}
+                />
+              ) : (
+                <img
+                  src={product?.pictureUrl}
+                  alt={product?.name}
+                  style={{ maxHeight: 200 }}
+                />
+              )}
+            </Box>
           </Grid>
         </Grid>
         <Box display="flex" justifyContent="space-between" sx={{ mt: 3 }}>
           <Button onClick={cancelEdit} variant="contained" color="inherit">
             Cancel
           </Button>
-          <Button variant="contained" color="success" type='submit'>
+          <LoadingButton loading={isSubmitting} variant="contained" color="success" type="submit">
             Submit
-          </Button>
+          </LoadingButton>
         </Box>
       </form>
     </Box>

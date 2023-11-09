@@ -13,17 +13,25 @@ import {
   TableBody,
 } from "@mui/material";
 import AppPagination from "../../app/layout/AppPagination";
-import { setPageNumber } from "../../app/store/slices/catalogSlice";
+import {
+  removeProduct,
+  setPageNumber,
+} from "../../app/store/slices/catalogSlice";
 import { useProducts } from "../../app/hooks/useProducts";
 import { useAppDispatch } from "../../app/hooks/reduxHooks";
 import { useState } from "react";
 import ProductForm from "./ProductForm";
 import { Product } from "../../app/interfaces/product";
+import apiRequests from "../../app/api/requests";
 
 const InventoryPage = () => {
   const { products, pagination } = useProducts();
   const [editMode, setEditMode] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState<Product | undefined>(undefined);
+  const [selectedProduct, setSelectedProduct] = useState<Product | undefined>(
+    undefined
+  );
+  const [loading, setLoading] = useState(false);
+  const [target, setTarget] = useState(0);
 
   const dispatch = useAppDispatch();
 
@@ -32,12 +40,22 @@ const InventoryPage = () => {
     setEditMode(true);
   }
 
+  function handleDeleteProduct(id: number) {
+    setLoading(true);
+    setTarget(id);
+    apiRequests.Admin.deleteProduct(id)
+      .then(() => dispatch(removeProduct(id)))
+      .catch((error) => console.log(error))
+      .finally(() => setLoading(false));
+  }
+
   function cancelEdit() {
-    if(selectedProduct) setSelectedProduct(undefined);
+    if (selectedProduct) setSelectedProduct(undefined);
     setEditMode(false);
   }
 
-  if(editMode) return <ProductForm product={selectedProduct} cancelEdit={cancelEdit}/>
+  if (editMode)
+    return <ProductForm product={selectedProduct} cancelEdit={cancelEdit} />;
 
   return (
     <>
@@ -45,7 +63,12 @@ const InventoryPage = () => {
         <Typography sx={{ p: 2 }} variant="h4">
           Inventory
         </Typography>
-        <Button sx={{ m: 2 }} size="large" variant="contained" onClick={() => setEditMode(true)}>
+        <Button
+          sx={{ m: 2 }}
+          size="large"
+          variant="contained"
+          onClick={() => setEditMode(true)}
+        >
           Create
         </Button>
       </Box>
@@ -88,8 +111,16 @@ const InventoryPage = () => {
                 <TableCell align="center">{product.brand}</TableCell>
                 <TableCell align="center">{product.quantityInStock}</TableCell>
                 <TableCell align="right">
-                  <Button startIcon={<Edit />} onClick={() => handleSelectProduct(product)}/>
-                  <LoadingButton startIcon={<Delete />} color="error" />
+                  <Button
+                    startIcon={<Edit />}
+                    onClick={() => handleSelectProduct(product)}
+                  />
+                  <LoadingButton
+                    loading={loading && target === product.id}
+                    startIcon={<Delete />}
+                    color="error"
+                    onClick={() => handleDeleteProduct(product.id)}
+                  />
                 </TableCell>
               </TableRow>
             ))}

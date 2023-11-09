@@ -20,13 +20,22 @@ export const router = createBrowserRouter([
     path: "/",
     element: <App />,
     children: [
+      //Authentication routes
       {
         element: <Auth />,
         children: [
           { path: "checkout", element: <CheckoutWrapper /> },
           { path: "orders", element: <OrdersPage /> },
-          { path: "inventory", element: <InventoryPage /> },
       ]},
+
+      //Authentication + Admin routes
+      {
+        element: <Auth roles={['Admin']} />,
+        children: [
+          { path: "inventory", element: <InventoryPage /> },
+          { path: "error-test", element: <TestPage /> },
+      ]},
+
       { path: "login", element: <LoginPage /> },
       { path: "register", element: <RegisterPage /> },
       { path: "catalog", element: <Catalog /> },
@@ -34,7 +43,6 @@ export const router = createBrowserRouter([
       { path: "shopping-cart", element: <ShoppingCartPage /> },
       { path: "about", element: <AboutPage /> },
       { path: "contact", element: <ContactPage /> },
-      { path: "error-test", element: <TestPage /> },
       { path: "server-error", element: <ServerError /> },
       { path: "not-found", element: <NotFound /> },
       { path: "*", element: <Navigate replace to="/not-found" /> },

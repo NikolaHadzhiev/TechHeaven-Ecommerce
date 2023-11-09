@@ -5,6 +5,7 @@ import apiRequests from "../../api/requests";
 import { router } from "../../router/Router";
 import { toast } from "react-toastify";
 import { setShoppingCart } from "./shoppingCartSlice";
+import { parseJwt } from "../../util/helper";
 
 interface AccountState {
   user: User | null;
@@ -66,7 +67,9 @@ export const accountSlice = createSlice({
         router.navigate('/');
     },
     setUser: (state, action) => {
-        state.user = action.payload
+      let claims = parseJwt(action.payload.token);
+      let roles = claims['http://schemas.microsoft.com/ws/2008/06/identity/claims/role']
+      state.user = {...action.payload, roles: typeof(roles) === 'string' ? [roles] : roles};
     }
   },
   extraReducers: (builder => {
@@ -78,7 +81,9 @@ export const accountSlice = createSlice({
     });
 
     builder.addMatcher(isAnyOf(signInUser.fulfilled, fetchCurrentUser.fulfilled), (state, action) => {
-        state.user = action.payload;
+        let claims = parseJwt(action.payload.token);
+        let roles = claims['http://schemas.microsoft.com/ws/2008/06/identity/claims/role']
+        state.user = {...action.payload, roles: typeof(roles) === 'string' ? [roles] : roles};
     });
 
     builder.addMatcher(isAnyOf(signInUser.rejected), (state, action) => {
