@@ -1,8 +1,4 @@
-import {
-  Button,
-  Grid,
-  Typography,
-} from "@mui/material";
+import { Button, Grid, Typography } from "@mui/material";
 import OrderSummary from "./OrderSummary";
 import { Link } from "react-router-dom";
 import { useAppSelector } from "../../app/hooks/reduxHooks";
@@ -13,8 +9,8 @@ import ShoppingCartTable from "./ShoppingCartTable";
 
 const ShoppingCartPage = () => {
   // const { shoppingCart, updateItemQuantity, removeItemFromShoppingCart } = useStoreContext();
-  const { shoppingCart} = useAppSelector(state => state.shoppingCart);
- 
+  const { shoppingCart } = useAppSelector((state) => state.shoppingCart);
+
   // const [buttonLoadingState, setButtonLoadingState] = useState({
   //   loading: false,
   //   buttonName: "",
@@ -42,7 +38,21 @@ const ShoppingCartPage = () => {
   //     .finally(() => setButtonLoadingState({ loading: false, buttonName: "" }));
   // }
 
-  if (!shoppingCart || shoppingCart.items.length === 0) return <Typography variant="h3">Your shopping cart is empty</Typography>;
+  if (!shoppingCart || shoppingCart.items.length === 0)
+    return (
+      <Grid
+        container
+        spacing={0}
+        direction="column"
+        alignItems="center"
+        justifyContent="center"
+        sx={{ minHeight: "80vh" }}
+      >
+        <Grid item xs={3}>
+          <Typography variant="h3">Your shopping cart is empty</Typography>
+        </Grid>
+      </Grid>
+    );
 
   return (
     <>
@@ -51,7 +61,13 @@ const ShoppingCartPage = () => {
         <Grid item xs={6} />
         <Grid item xs={6}>
           <OrderSummary />
-          <Button component={Link} to={'/checkout'} variant='contained' size='large' fullWidth>
+          <Button
+            component={Link}
+            to={"/checkout"}
+            variant="contained"
+            size="large"
+            fullWidth
+          >
             Checkout
           </Button>
         </Grid>
