@@ -1,19 +1,20 @@
 import { Typography, Paper, List, ListItem } from "@mui/material";
+import "./AboutPage.scss";
 
 const AboutPage = () => {
   return (
-    <Paper sx={{ my: 4, p: 2 }}>
-      <Typography variant="h4" component="h1" gutterBottom>
+    <Paper className="paperStyle">
+      <Typography variant="h4" component="h1" className="titleStyle">
         About TechHeaven
       </Typography>
-      <Typography variant="body1" gutterBottom mt={3}>
+      <Typography variant="body1" className="bodyStyle">
         TechHeaven is more than just a website for gaming peripherals,
-        merchandise, and hardware. t's a platform that ensures a positive
+        merchandise, and hardware. It's a platform that ensures a positive
         experience and exceptional service. Since the inception of TechHeaven,
         we've been tirelessly dedicated to assisting gamers in discovering the
         perfect product for their needs.
       </Typography>
-      <Typography variant="body1" gutterBottom mt={3}>
+      <Typography variant="body1" className="bodyStyle">
         We are a self-reliant division of one of Bulgaria's leading computer
         distribution companies, providing free delivery for orders exceeding
         50.00$ across the country for our entire range of products. Our team at
@@ -22,7 +23,7 @@ const AboutPage = () => {
         authorized sales representative and service partner for all the brands
         we offer on our site, ensuring top-notch after-sales service.
       </Typography>
-      <Typography variant="h6" component="h2" gutterBottom sx={{mt: 4}}>
+      <Typography variant="h6" component="h2" className="subTitleStyle">
         Why should you choose our services?
       </Typography>
       <List>

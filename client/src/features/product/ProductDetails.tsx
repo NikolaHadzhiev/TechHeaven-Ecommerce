@@ -11,28 +11,22 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-// import { Product } from "../../app/interfaces/product";
-// import apiRequests from "../../app/api/requests";
 import NotFound from "../../errors/NotFound";
 import LoadingComponent from "../../app/layout/LoadingComponent";
-// import { useStoreContext } from "../../app/hooks/useStoreContext";
 import { LoadingButton } from "@mui/lab";
 import { useAppDispatch, useAppSelector } from "../../app/hooks/reduxHooks";
 import { addItemAsync, removeItemAsync} from "../../app/store/slices/shoppingCartSlice";
 import { fetchProductAsync, productSelectors } from "../../app/store/slices/catalogSlice";
+import "./ProductDetails.scss"
 
 const ProductDetails = () => {
-  // const { shoppingCart, setShoppingCart, removeItemFromShoppingCart } = useStoreContext();
   const {shoppingCart, loadingState} = useAppSelector(state => state.shoppingCart);
   const {loadingStatus: productLoadingState} = useAppSelector(state => state.catalog);
   const dispatch = useAppDispatch();
   const { id } = useParams<{ id: string }>();
   const product = useAppSelector(state => productSelectors.selectById(state, id!))
-  // const [product, setProduct] = useState<Product | null>(null);
-  // const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(0);
-  // const [submitting, setSubmitting] = useState(false);
-
+  
   const shoppingCartItem = shoppingCart?.items.find(
     (i) => i.productId === product?.id
   );
@@ -40,11 +34,6 @@ const ProductDetails = () => {
   useEffect(() => {
     if (shoppingCartItem) setQuantity(shoppingCartItem.quantity);
     if (!product && id) dispatch(fetchProductAsync(parseInt(id)))
-    // id &&
-    //   apiRequests.Catalog.details(parseInt(id))
-    //     .then((response) => setProduct(response))
-    //     .catch((error) => console.log(error))
-    //     .finally(() => setLoading(false));
   }, [id, shoppingCartItem, dispatch, product]);
 
   function handleChange(event: any) {
@@ -56,25 +45,11 @@ const ProductDetails = () => {
   function handleUpdateCart() {
     if (!shoppingCartItem || quantity > shoppingCartItem.quantity) {
       const addQuantity = shoppingCartItem ? quantity - shoppingCartItem.quantity : quantity;
-
-      // apiRequests.ShoppingCart.addItem(product?.id!, addQuantity)
-      //   // .then(shoppingCart => setShoppingCart(shoppingCart))
-      //   .then(shoppingCart => dispatch(setShoppingCart(shoppingCart)))
-      //   .catch((error) => console.log(error))
-      //   .finally(() => setSubmitting(false));
-
       dispatch(addItemAsync({productId: product?.id!, quantity: addQuantity}))
 
     } else {
       const removeQuantity = shoppingCartItem.quantity - quantity;
       dispatch(removeItemAsync({productId: product?.id!, quantity: removeQuantity}))
-      // apiRequests.ShoppingCart.removeItem(product?.id!, removeQuantity)
-      //   // .then(() => removeItemFromShoppingCart(product?.id!, removeQuantity))
-      //   .then(() => dispatch(updateOrRemoveItemFromShoppingCart({productId: product?.id!, quantity: removeQuantity, indicator: 'remove'})))
-      //   .catch((error) => console.log(error))
-      //   .finally(() => setSubmitting(false));
-
-
     }
   }
 
@@ -88,12 +63,12 @@ const ProductDetails = () => {
         <img
           src={product.pictureUrl}
           alt={product.name}
-          style={{ width: "100%" }}
+          className="product-details-image"
         />
       </Grid>
       <Grid item xs={6}>
         <Typography variant="h3">{product.name}</Typography>
-        <Divider sx={{ mb: 2 }} />
+        <Divider className="product-details-divider" />
         <Typography variant="h4" color="secondary">
           ${(product.price / 100).toFixed(2)}
         </Typography>
@@ -139,7 +114,7 @@ const ProductDetails = () => {
               disabled={(shoppingCartItem?.quantity === quantity) || (!shoppingCartItem && quantity === 0)}
               loading={loadingState.includes('pending')}
               onClick={handleUpdateCart}
-              sx={{ height: "55px" }}
+              className="product-details-button"
               color="primary"
               size="large"
               variant="contained"

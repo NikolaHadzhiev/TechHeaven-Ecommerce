@@ -13,25 +13,14 @@ import { Link } from "react-router-dom";
 import { LoadingButton } from "@mui/lab";
 import { useAppDispatch, useAppSelector } from "../../app/hooks/reduxHooks";
 import { addItemAsync } from "../../app/store/slices/shoppingCartSlice";
-
+import "./ProductCard.scss"
 interface Props {
   product: Product;
 }
 
 const ProductCard = ({ product }: Props) => {
-  // const [loading, setLoading] = useState(false);
-  // const { setShoppingCart } = useStoreContext();
   const {loadingState} = useAppSelector(state => state.shoppingCart)
   const dispatch = useAppDispatch();
-
-  // function handleAddItem(productId: number, quantity = 1) {
-  //   setLoading(true);
-  //   apiRequests.ShoppingCart.addItem(productId, quantity) //after adding the item the shopping cart is returned from API
-  //     // .then(shoppingCart => setShoppingCart(shoppingCart))
-  //     .then(shoppingCart => dispatch(setShoppingCart(shoppingCart)))
-  //     .catch((error) => console.log(error))
-  //     .finally(() => setLoading(false));
-  // }
 
   return (
     <Card>
@@ -48,7 +37,7 @@ const ProductCard = ({ product }: Props) => {
       />
 
       <CardMedia
-        sx={{ height: 140, backgroundSize: "contain" }}
+        className="product-card-media"
         image={product.pictureUrl}
         title={product.name}
       />

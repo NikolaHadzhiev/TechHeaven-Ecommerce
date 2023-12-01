@@ -3,40 +3,12 @@ import OrderSummary from "./OrderSummary";
 import { Link } from "react-router-dom";
 import { useAppSelector } from "../../app/hooks/reduxHooks";
 import ShoppingCartTable from "./ShoppingCartTable";
-// import { useStoreContext } from "../../app/hooks/useStoreContext";
-// import { updateOrRemoveItemFromShoppingCart } from "../../app/store/slices/shoppingCartSlice";
-// import apiRequests from "../../app/api/requests";
+import "./ShoppingCartPage.scss"
 
 const ShoppingCartPage = () => {
-  // const { shoppingCart, updateItemQuantity, removeItemFromShoppingCart } = useStoreContext();
   const { shoppingCart } = useAppSelector((state) => state.shoppingCart);
 
-  // const [buttonLoadingState, setButtonLoadingState] = useState({
-  //   loading: false,
-  //   buttonName: "",
-  // });
-
-  // function handlePlusItem(productId: number, buttonName: string, quantity = 1) {
-  //   setButtonLoadingState({ loading: true, buttonName });
-  //   apiRequests.ShoppingCart.addItem(productId)
-  //     // .then(() => updateItemQuantity(productId, quantity))
-  //     .then(() => dispatch(updateOrRemoveItemFromShoppingCart({productId, quantity, indicator: 'add'})))
-  //     .catch((error) => console.log(error))
-  //     .finally(() => setButtonLoadingState({ loading: false, buttonName: "" }));
-  // }
-
-  // function handleMinusItem(
-  //   productId: number,
-  //   buttonName: string,
-  //   quantity = 1
-  // ) {
-  //   setButtonLoadingState({ loading: true, buttonName });
-  //   apiRequests.ShoppingCart.removeItem(productId, quantity)
-  //     // .then(() => removeItemFromShoppingCart(productId, quantity))
-  //     .then(() => dispatch(updateOrRemoveItemFromShoppingCart({productId, quantity, indicator: 'remove'})))
-  //     .catch((error) => console.log(error))
-  //     .finally(() => setButtonLoadingState({ loading: false, buttonName: "" }));
-  // }
+  
 
   if (!shoppingCart || shoppingCart.items.length === 0)
     return (
@@ -46,7 +18,7 @@ const ShoppingCartPage = () => {
         direction="column"
         alignItems="center"
         justifyContent="center"
-        sx={{ minHeight: "80vh" }}
+        className="shopping-cart-empty"
       >
         <Grid item xs={3}>
           <Typography variant="h3">Your shopping cart is empty</Typography>

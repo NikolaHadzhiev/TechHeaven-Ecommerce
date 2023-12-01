@@ -12,6 +12,7 @@ import ProductSort from "../product/ProductSort";
 import ProductFilter from "../product/ProductFilter";
 import AppPagination from "../../app/layout/AppPagination";
 import { useProducts } from "../../app/hooks/useProducts";
+import "./CatalogPage.scss"
 
 const sortOptions = [
   { value: "name", label: "Alphanetical" },
@@ -30,16 +31,16 @@ const Catalog = () => {
   return (
     <Grid container columnSpacing={4}>
       <Grid item xs={3}>
-        <Typography variant={"h5"} sx={{ mb: 1 }}>
+        <Typography variant={"h5"} className="filter-text">
           Search
         </Typography>
-        <Paper sx={{ mb: 2 }}>
+        <Paper className="catalog-search">
           <ProductSearch />
         </Paper>
-        <Typography variant={"h5"} sx={{ mb: 1 }}>
+        <Typography variant={"h5"} className="filter-text">
           Sort
         </Typography>
-        <Paper sx={{ mb: 2, p: 2 }}>
+        <Paper className="catalog-filters">
           <ProductSort
             selectedValue={productParams.orderBy}
             options={sortOptions}
@@ -53,10 +54,10 @@ const Catalog = () => {
             }
           />
         </Paper>
-        <Typography variant={"h5"} sx={{ mb: 1 }}>
+        <Typography variant={"h5"} className="filter-text">
           Brands
         </Typography>
-        <Paper sx={{ mb: 2, p: 2 }}>
+        <Paper className="catalog-filters">
           <ProductFilter
             items={brands}
             checked={productParams.brands}
@@ -65,10 +66,10 @@ const Catalog = () => {
             }
           />
         </Paper>
-        <Typography variant={"h5"} sx={{ mb: 1 }}>
+        <Typography variant={"h5"} className="filter-text">
           Types
         </Typography>
-        <Paper sx={{ mb: 2, p: 2 }}>
+        <Paper className="catalog-filters">
           <ProductFilter
             items={types}
             checked={productParams.types}
@@ -78,9 +79,9 @@ const Catalog = () => {
           />
         </Paper>
       </Grid>
-      <Grid item xs={9} sx={{ display: "flex", flexDirection: "column" }}>
+      <Grid item xs={9} className="catalog-list">
         <ProductList products={products} />
-        <Grid container sx={{ mt: "auto", mb: 2 }}>
+        <Grid container className='catalog-pagination'>
           <Grid item xs={12}>
             {pagination && (
               <AppPagination

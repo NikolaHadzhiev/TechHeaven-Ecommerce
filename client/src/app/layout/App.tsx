@@ -8,9 +8,6 @@ import {
 } from "@mui/material";
 import { Outlet, useLocation } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
-// import { useStoreContext } from "../../app/hooks/useStoreContext";
-//import { getCookie } from "../util/helper";
-//import apiRequests from "../api/requests";
 import LoadingComponent from "./LoadingComponent";
 import "react-toastify/dist/ReactToastify.css";
 import { useAppDispatch } from "../hooks/reduxHooks";
@@ -19,7 +16,6 @@ import { fetchShoppingCartAsync } from "../store/slices/shoppingCartSlice";
 import HomePage from "../../features/home/HomePage";
 
 const App = () => {
-  // const { setShoppingCart } = useStoreContext();
   const location = useLocation();
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(true);

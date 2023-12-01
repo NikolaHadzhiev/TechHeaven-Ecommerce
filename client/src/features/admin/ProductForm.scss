@@ -1,0 +1,24 @@
+.product-container {
+    padding: 32px;
+    margin-bottom: 24px;
+}
+
+.product-title {
+    margin-bottom: 32px !important;
+}
+
+.product-dropzone {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.product-dropzone-img {
+    max-height: 200px;
+}
+
+.product-dropzone-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 32px;
+}

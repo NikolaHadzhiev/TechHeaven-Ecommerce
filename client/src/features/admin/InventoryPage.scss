@@ -1,0 +1,37 @@
+.inventory-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.inventory-typography {
+    padding: 16px;
+}
+
+.inventory-button {
+    margin: 16px !important;
+}
+
+.inventory-table {
+    min-width: 650px !important;
+}
+
+.inventory-row {
+    &:last-child td, &:last-child th {
+        border: 0;
+    }
+}
+
+.inventory-image-container {
+    display: flex;
+    align-items: center;
+}
+
+.inventory-img {
+    height: 50px;
+    margin-right: 50px;
+}
+
+.inventory-pagination {
+    padding-top: 16px;
+    padding-bottom: 16px;
+}

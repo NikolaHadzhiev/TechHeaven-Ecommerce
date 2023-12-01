@@ -15,6 +15,7 @@ import LoadingComponent from "../../app/layout/LoadingComponent";
 import { Order } from "../../app/interfaces/order";
 import OrderDetail from "./OrderDetail";
 import { Link } from "react-router-dom";
+import "./OrderPage.scss"
 
 const OrdersPage = () => {
   const [orders, setOrders] = useState<Order[] | null>(null);
@@ -41,7 +42,7 @@ const OrdersPage = () => {
   return (
     <>
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <Table className="order-page-table" aria-label="simple table">
           <TableHead>
             <TableRow>
               <TableCell>Order number</TableCell>
@@ -55,7 +56,7 @@ const OrdersPage = () => {
             {orders?.map((order) => (
               <TableRow
                 key={order.id}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                className="order-page-row "
               >
                 <TableCell component="th" scope="row">
                   {order.id}
@@ -78,7 +79,7 @@ const OrdersPage = () => {
         </Table>
       </TableContainer>
       {orders?.length === 0 && (
-        <Typography variant='h6' sx={{textAlign: 'center'}}>
+        <Typography variant='h6' className="order-page-question">
           {"Don't have any order? Buy products from "}
           <Link
             to="/catalog"

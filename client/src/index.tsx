@@ -1,6 +1,4 @@
-import React from "react";
 import ReactDOM from "react-dom/client";
-import "./app/layout/styles.css";
 import reportWebVitals from "./reportWebVitals";
 import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
@@ -9,7 +7,6 @@ import "@fontsource/roboto/700.css";
 import { RouterProvider } from "react-router-dom";
 import { store } from "./app/store/configureStrore";
 import { router } from "./app/router/Router";
-// import { StoreProvider } from "./app/context/StoreContext";
 import { Provider } from "react-redux";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -19,11 +16,9 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <>
-    {/* <StoreProvider> */}
       <Provider store={store}>
         <RouterProvider router={router} />
       </Provider>
-    {/* </StoreProvider> */}
   </>
 );
 

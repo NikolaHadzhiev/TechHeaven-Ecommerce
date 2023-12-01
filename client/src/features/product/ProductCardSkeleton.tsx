@@ -6,6 +6,7 @@ import {
     Grid,
     Skeleton
 } from "@mui/material";
+import "./ProductCardSkeleton.scss"
 
 export default function ProductCardSkeleton() {
     return (
@@ -19,14 +20,13 @@ export default function ProductCardSkeleton() {
                         animation="wave"
                         height={10}
                         width="80%"
-                        style={{ marginBottom: 6 }}
                     />
                 }
             />
-            <Skeleton sx={{ height: 190 }} animation="wave" variant="rectangular" />
+            <Skeleton className="skeleton" animation="wave" variant="rectangular" />
             <CardContent>
                 <>
-                    <Skeleton animation="wave" height={10} style={{ marginBottom: 6 }} />
+                    <Skeleton animation="wave" height={10} />
                     <Skeleton animation="wave" height={10} width="80%" />
                 </>
             </CardContent>

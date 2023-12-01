@@ -1,0 +1,13 @@
+.order-page-table {
+    min-width: 650px !important;
+}
+
+.order-page-row {
+    &:last-child td, &:last-child th {
+        border: 0;
+    }
+}
+
+.order-page-question {
+    text-align: center;
+}

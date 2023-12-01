@@ -16,6 +16,7 @@ import {
 } from "../../app/store/slices/shoppingCartSlice";
 import { useAppSelector, useAppDispatch } from "../../app/hooks/reduxHooks";
 import { ShoppingItem } from "../../app/interfaces/shoppingItem";
+import "./ShoppingCartTable.scss"
 
 interface Props {
   items: ShoppingItem[];
@@ -28,7 +29,7 @@ const ShoppingCartTable = ({ items, isShoppingCart = true }: Props) => {
 
   return (
     <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }}>
+      <Table className="shopping-cart-table-container">
         <TableHead>
           <TableRow>
             <TableCell>Product</TableCell>
@@ -42,10 +43,10 @@ const ShoppingCartTable = ({ items, isShoppingCart = true }: Props) => {
           {items.map((item) => (
             <TableRow
               key={item.productId}
-              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+              className="shopping-cart-table-row"
             >
               <TableCell component="th" scope="row">
-                <Box display="flex" alignItems="center">
+                <Box className="shopping-cart-image-name">
                   <img
                     src={item.pictureUrl}
                     alt={item.name}

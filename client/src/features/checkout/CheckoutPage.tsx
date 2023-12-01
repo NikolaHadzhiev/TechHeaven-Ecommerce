@@ -20,6 +20,7 @@ import { clearShoppingCart } from "../../app/store/slices/shoppingCartSlice";
 import { LoadingButton } from "@mui/lab";
 import { StripeElementType } from "@stripe/stripe-js";
 import { CardNumberElement, useElements, useStripe } from "@stripe/react-stripe-js";
+import "./CheckoutPage.scss"
 
 const steps = ["Shipping address", "Review your order", "Payment details"];
 
@@ -140,7 +141,7 @@ const CheckoutPage = () => {
         <Typography component="h1" variant="h4" align="center">
           Checkout
         </Typography>
-        <Stepper activeStep={activeStep} sx={{ pt: 3, pb: 5 }}>
+        <Stepper activeStep={activeStep} className="checkout-stepper">
           {steps.map((label) => (
             <Step key={label}>
               <StepLabel>{label}</StepLabel>
@@ -167,7 +168,7 @@ const CheckoutPage = () => {
           ) : (
             <form onSubmit={methods.handleSubmit(handleNext)}>
               {getStepContent(activeStep)}
-              <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+              <Box className="checkout-container">
                 {activeStep !== 0 && (
                   <Button onClick={handleBack} sx={{ mt: 3, ml: 1 }}>
                     Back
@@ -178,7 +179,7 @@ const CheckoutPage = () => {
                   disabled={submitDisabled()}
                   variant="contained"
                   type="submit"
-                  sx={{ mt: 3, ml: 1 }}
+                  className="checkout-button"
                 >
                   {activeStep === steps.length - 1 ? "Place order" : "Next"}
                 </LoadingButton>

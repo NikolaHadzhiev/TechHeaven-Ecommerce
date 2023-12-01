@@ -1,0 +1,14 @@
+.shopping-cart-table-container {
+    min-width: 650px !important;
+}
+
+.shopping-cart-table-row {
+    &:last-child td, &:last-child th {
+        border: 0;
+    }
+}
+
+.shopping-cart-image-name {
+    display: flex !important;
+    align-items: center !important;
+}

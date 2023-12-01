@@ -23,6 +23,7 @@ import { useState } from "react";
 import ProductForm from "./ProductForm";
 import { Product } from "../../app/interfaces/product";
 import apiRequests from "../../app/api/requests";
+import "./InventoryPage.scss";
 
 const InventoryPage = () => {
   const { products, pagination } = useProducts();
@@ -59,12 +60,12 @@ const InventoryPage = () => {
 
   return (
     <>
-      <Box display="flex" justifyContent="space-between">
-        <Typography sx={{ p: 2 }} variant="h4">
+      <Box className='inventory-container'>
+        <Typography className='inventory-typography' variant="h4">
           Inventory
         </Typography>
         <Button
-          sx={{ m: 2 }}
+          className='inventory-button'
           size="large"
           variant="contained"
           onClick={() => setEditMode(true)}
@@ -73,7 +74,7 @@ const InventoryPage = () => {
         </Button>
       </Box>
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <Table className='inventory-table' aria-label="simple table">
           <TableHead>
             <TableRow>
               <TableCell>#</TableCell>
@@ -89,17 +90,17 @@ const InventoryPage = () => {
             {products.map((product) => (
               <TableRow
                 key={product.id}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                className="inventory-row"
               >
                 <TableCell component="th" scope="row">
                   {product.id}
                 </TableCell>
                 <TableCell align="left">
-                  <Box display="flex" alignItems="center">
+                  <Box className='inventory-image-container'>
                     <img
                       src={product.pictureUrl}
                       alt={product.name}
-                      style={{ height: 50, marginRight: 20 }}
+                      className='inventory-img'
                     />
                     <span>{product.name}</span>
                   </Box>
@@ -128,7 +129,7 @@ const InventoryPage = () => {
         </Table>
       </TableContainer>
       {pagination && (
-        <Box sx={{ pt: 2 }}>
+        <Box className='inventory-pagination'>
           <AppPagination
             pagination={pagination}
             onPageChange={(page: number) =>

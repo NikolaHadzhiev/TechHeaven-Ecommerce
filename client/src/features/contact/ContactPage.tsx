@@ -1,10 +1,6 @@
 import { Typography, Button, Paper, TextField, Grid, Box } from "@mui/material";
 import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
-
-const containerStyle = {
-  width: "100%",
-  height: "480px",
-};
+import "./ContactPage.scss";
 
 const center = {
   lat: 42.6977,
@@ -15,7 +11,7 @@ const ContactPage = () => {
   return (
     <Grid container spacing={2}>
       <Grid item xs={12} md={6}>
-        <Paper sx={{ mb: 4, p: 2 }}>
+        <Paper className="contactPaperStyle">
           <Typography variant="h4" component="h1" gutterBottom>
             Contact Us
           </Typography>
@@ -32,7 +28,7 @@ const ContactPage = () => {
             - service@techheaven.com
           </Typography>
         </Paper>
-        <Paper sx={{ my: 4, p: 2 }}>
+        <Paper className="contactPaperStyleMargin">
           <Typography variant="h4" component="h1" gutterBottom>
             Message us
           </Typography>
@@ -56,7 +52,7 @@ const ContactPage = () => {
             fullWidth
             margin="normal"
           />
-          <Button variant="contained" color="primary" sx={{ mt: 2 }}>
+          <Button variant="contained" color="primary" className="contactButtonStyle">
             Send
           </Button>
         </Paper>
@@ -64,14 +60,14 @@ const ContactPage = () => {
       <Grid item xs={12} md={6}>
         <LoadScript googleMapsApiKey="AIzaSyCJgDWn3WTrKuh1Wv94X97mC_S525aJ2V0">
           <GoogleMap
-            mapContainerStyle={containerStyle}
+            mapContainerClassName="contactContainerStyle"
             center={center}
             zoom={10}
           >
             <Marker position={center} />
           </GoogleMap>
         </LoadScript>
-        <Paper sx={{ my: 4, p: 2}}>
+        <Paper className="contactPaperStyleMargin">
           <Box>
             <Typography variant="h4" align="left" mb={3}>
               TechHeaven Gaming Room Sofia

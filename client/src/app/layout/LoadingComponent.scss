@@ -1,0 +1,11 @@
+.loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.loading-message {
+    justify-content: center;
+    position: fixed;
+    top: 60%;
+}

@@ -11,9 +11,9 @@ import {
   Typography,
 } from "@mui/material";
 import { NavLink } from "react-router-dom";
-// import { useStoreContext } from "../../app/hooks/useStoreContext";
 import { useAppSelector } from "../hooks/reduxHooks";
 import LoginMenuHeader from "../../features/account/LoginMenuHeader";
+import "./Header.scss"
 
 const midLinks = [
   { title: "catalog", path: "/catalog" },
@@ -25,62 +25,47 @@ const rightLinks = [
   { title: "login", path: "/login" },
   { title: "register", path: "/register" },
 ];
-
-const navStyles = {
-  color: "inherit",
-  textDecoration: "none",
-  typography: "h6 ",
-  "&:hover": { color: "grey.500" },
-  "&.active": { color: "#240747" },
-};
 interface Props {
   darkMode: boolean;
   handleThemeChange: () => void;
 }
 
 const Header = ({ darkMode, handleThemeChange }: Props) => {
-  // const { shoppingCart } = useStoreContext();
   const { shoppingCart } = useAppSelector((state) => state.shoppingCart);
   const itemsInCartCount =
     shoppingCart?.items.reduce((value, item) => value + item.quantity, 0) || 0;
   const { user } = useAppSelector((state) => state.account);
 
   return (
-    <AppBar position="static" sx={{ backgroundColor: "#3b50b2" }}>
-      <Toolbar
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
-        <Box display="flex" alignItems="center">
+    <AppBar className="header-app-bar">
+      <Toolbar className="header-toolbar">
+        <Box className="header-container">
           <Typography
             variant="h6"
             component={NavLink}
             to="/"
-            sx={{ color: "inherit", textDecoration: "none" }}
+            className="header-home"
           >
             TechHeaven
           </Typography>
           <Switch checked={darkMode} onChange={handleThemeChange} />
         </Box>
 
-        <List sx={{ display: "flex" }}>
+        <List className="header-list">
           {midLinks.map(({ title, path }) => (
-            <ListItem component={NavLink} to={path} key={path} sx={navStyles}>
+            <ListItem component={NavLink} to={path} key={path} className="header-nav-style">
               {title.toUpperCase()}
             </ListItem>
           ))}
 
           {user && user.roles?.includes('Admin') && (
-            <ListItem component={NavLink} to={"/inventory"} sx={navStyles}>
+            <ListItem component={NavLink} to={"/inventory"} className="header-nav-style">
               INVENTORY
             </ListItem>
           )}
 
           {user && user.roles?.includes('Admin') && (
-            <ListItem component={NavLink} to={"/error-test"} sx={navStyles}>
+            <ListItem component={NavLink} to={"/error-test"} className="header-nav-style">
               TEST
             </ListItem>
           )}
@@ -93,7 +78,7 @@ const Header = ({ darkMode, handleThemeChange }: Props) => {
             size="large"
             edge="start"
             color="inherit"
-            sx={{ mr: 2 }}
+            className="header-shopping-cart"
           >
             <Badge
               badgeContent={itemsInCartCount?.toString()}
@@ -106,13 +91,13 @@ const Header = ({ darkMode, handleThemeChange }: Props) => {
           {user ? (
             <LoginMenuHeader />
           ) : (
-            <List sx={{ display: "flex" }}>
+            <List className="header-list">
               {rightLinks.map(({ title, path }) => (
                 <ListItem
                   component={NavLink}
                   to={path}
                   key={path}
-                  sx={navStyles}
+                  className="header-nav-style"
                 >
                   {title.toUpperCase()}
                 </ListItem>

@@ -13,6 +13,7 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import apiRequests from "../../app/api/requests";
 import { toast } from "react-toastify";
+import "./Register.scss";
 
 const RegisterPage = () => {
   const navigate = useNavigate();
@@ -41,14 +42,9 @@ const RegisterPage = () => {
     <Container
       component={Paper}
       maxWidth="sm"
-      sx={{
-        p: 4,
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-      }}
+      className="registerContainerStyle"
     >
-      <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+      <Avatar className="registerAvatarStyle">
         <LockOutlined />
       </Avatar>
       <Typography component="h1" variant="h5">
@@ -65,7 +61,7 @@ const RegisterPage = () => {
             .catch((error) => handleApiErrors(error))
         )}
         noValidate
-        sx={{ mt: 1 }}
+        className="registerFormStyle"
       >
         <TextField
           margin="normal"
@@ -108,19 +104,19 @@ const RegisterPage = () => {
           error={!!errors.password}
           helperText={errors?.password?.message as string}
         />
-        <LoadingButton
+        <LoadingButton 
           disabled={!isValid}
-          loading={isSubmitting}
-          type="submit"
-          fullWidth
-          variant="contained"
-          sx={{ mt: 3, mb: 2 }}
+          loading={isSubmitting} 
+          type="submit" 
+          fullWidth 
+          variant="contained" 
+          className="registerLoadingButtonStyle"
         >
           Register
         </LoadingButton>
         <Grid container>
           <Grid item>
-            <Link to="/login" style={{ textDecoration: "none", color: "rgb(156, 39, 176)"}}>
+            <Link to="/login" style={{ textDecoration: 'none', color: "rgb(156, 39, 176)"}}>
               {"Already have an account? Sign In"}
             </Link>
           </Grid>

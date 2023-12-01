@@ -12,7 +12,7 @@ import apiRequests from "../../app/api/requests";
 import { useAppDispatch } from "../../app/hooks/reduxHooks";
 import { setProduct } from "../../app/store/slices/catalogSlice";
 import { LoadingButton } from "@mui/lab";
-
+import './ProductForm.scss'
 interface Props {
   product?: Product;
   cancelEdit: () => void;
@@ -50,8 +50,8 @@ const ProductForm = ({ product, cancelEdit }: Props) => {
   }
 
   return (
-    <Box component={Paper} sx={{ p: 4 }}>
-      <Typography variant="h4" gutterBottom sx={{ mb: 4 }}>
+    <Box component={Paper} className="product-container">
+      <Typography variant="h4" gutterBottom className="product-title">
         Product Details
       </Typography>
       <form onSubmit={handleSubmit(handleSubmitData)}>
@@ -102,28 +102,26 @@ const ProductForm = ({ product, cancelEdit }: Props) => {
           </Grid>
           <Grid item xs={12}>
             <Box
-              display="flex"
-              justifyContent="space-between"
-              alignItems="center"
+              className='product-dropzone'
             >
               <AppDropzone control={control} name="file" />
               {watchFile ? (
                 <img
                   src={watchFile.preview}
                   alt="preview"
-                  style={{ maxHeight: 200 }}
+                  className="product-dropzone-img"
                 />
               ) : (
                 <img
                   src={product?.pictureUrl}
                   alt={product?.name}
-                  style={{ maxHeight: 200 }}
+                  className="product-dropzone-img"
                 />
               )}
             </Box>
           </Grid>
         </Grid>
-        <Box display="flex" justifyContent="space-between" sx={{ mt: 3 }}>
+        <Box className='product-dropzone-buttons'>
           <Button onClick={cancelEdit} variant="contained" color="inherit">
             Cancel
           </Button>

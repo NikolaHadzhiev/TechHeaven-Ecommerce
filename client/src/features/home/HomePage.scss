@@ -1,0 +1,16 @@
+// HomePage.scss
+.heroImage {
+  display: block;
+  width: 100%;
+  max-height: 500px;
+}
+
+.centerBox {
+  display: flex;
+  justify-content: center;
+  padding: 50px;
+}
+
+.welcomeText {
+  margin-top: 4px;
+}

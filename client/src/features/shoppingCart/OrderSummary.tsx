@@ -1,13 +1,11 @@
 import { TableContainer, Paper, Table, TableBody, TableRow, TableCell } from "@mui/material";
-// import { useStoreContext } from "../../app/hooks/useStoreContext";
 import { useAppSelector } from "../../app/hooks/reduxHooks";
-
+import "./OrderSummary.scss"
 interface Props {
     subtotal?: number;
 }
 
 const OrderSummary = ({ subtotal }: Props) =>  {
-    // const {shoppingCart} = useStoreContext();
     const {shoppingCart} = useAppSelector(state => state.shoppingCart);
 
     if(subtotal === undefined) subtotal = shoppingCart?.items.reduce((value, item) => value + (item.quantity * item.price), 0) ?? 0;
@@ -33,7 +31,7 @@ const OrderSummary = ({ subtotal }: Props) =>  {
                         </TableRow>
                         <TableRow>
                             <TableCell>
-                                <span style={{ fontStyle: 'italic' }}>*Orders over $50 qualify for free delivery</span>
+                                <span className="order-summary-free-delivery">*Orders over $50 qualify for free delivery</span>
                             </TableCell>
                         </TableRow>
                     </TableBody>
